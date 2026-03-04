@@ -1,6 +1,6 @@
 import { BusEvent } from "@/bus/bus-event"
 import z from "zod"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { APICallError, convertToModelMessages, LoadAPIKeyError, type ModelMessage, type UIMessage } from "ai"
 import { Identifier } from "../id/id"
 import { LSP } from "../lsp"
@@ -363,7 +363,7 @@ export namespace MessageV2 {
     system: z.string().optional(),
     tools: z.record(z.string(), z.boolean()).optional(),
     variant: z.string().optional(),
-    // kilocode_change start
+    // ggai_change start
     editorContext: z
       .object({
         visibleFiles: z.array(z.string()).optional(),
@@ -373,7 +373,7 @@ export namespace MessageV2 {
         timezone: z.string().optional(),
       })
       .optional(),
-    // kilocode_change end
+    // ggai_change end
   }).meta({
     ref: "UserMessage",
   })

@@ -1,0 +1,55 @@
+$ bun ./script/build.ts
+$ bun run --conditions=browser ./src/index.ts generate
+20 |   export const dashboardHost = process.env.GGAI_DASHBOARD_URL || "https://app.genesisgrid.ai"
+21 | 
+22 |   const log = Log.create({ service: "ggai-sessions" })
+23 | 
+24 |   Object.defineProperty(process.env, "GGAI_DISABLE_SESSION_INGEST", {
+25 |     get: () => typeof process.env.GGAI_DISABLE_SESSION_INGEST !== "undefined",
+                                   ^
+RangeError: Maximum call stack size exceeded.
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)
+
+Bun v1.3.10 (Linux x64)
+error: script "dev" exited with code 1
+ShellError: Failed with exit code 1
+ exitCode: 1,
+   stdout: "",
+   stderr: "$ bun run --conditions=browser ./src/index.ts generate\n20 |   export const dashboardHost = process.env.GGAI_DASHBOARD_URL || \"https://app.genesisgrid.ai\"\n21 | \n22 |   const log = Log.create({ service: \"ggai-sessions\" })\n23 | \n24 |   Object.defineProperty(process.env, \"GGAI_DISABLE_SESSION_INGEST\", {\n25 |     get: () => typeof process.env.GGAI_DISABLE_SESSION_INGEST !== \"undefined\",\n                                   ^\nRangeError: Maximum call stack size exceeded.\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n      at get (/home/guilherme/Documentos/GG.AI/PLATAFORMAS/kilocode/packages/opencode/src/ggai-sessions/ggai-sessions.ts:25:31)\n\nBun v1.3.10 (Linux x64)\nerror: script \"dev\" exited with code 1\n",
+
+      at ShellPromise (unknown:75:16)
+      at BunShell (unknown:191:35)
+
+Bun v1.3.10 (Linux x64)
+error: script "build" exited with code 1

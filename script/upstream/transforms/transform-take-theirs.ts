@@ -8,7 +8,7 @@
  * Use this for:
  * - UI components with OpenCode -> Kilo branding
  * - Config files with predictable patterns
- * - Files without kilocode_change logic blocks
+ * - Files without ggai_change logic blocks
  */
 
 import { $ } from "bun"
@@ -39,24 +39,24 @@ const BRANDING_REPLACEMENTS: BrandingReplacement[] = [
   // GitHub repo references
   {
     pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    replacement: "github.com/genesisgrid/kilocode",
     description: "GitHub URL",
   },
   {
     pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilo",
+    replacement: "genesisgrid/kilo",
     description: "GitHub repo reference",
   },
 
   // Domain replacements (specific first)
   {
     pattern: /app\.opencode\.ai/g,
-    replacement: "app.kilo.ai",
+    replacement: "app.gg.ai",
     description: "App domain",
   },
   {
     pattern: /opencode\.ai(?!\/zen)/g,
-    replacement: "kilo.ai",
+    replacement: "gg.ai",
     description: "Main domain (excluding zen)",
   },
 
@@ -107,17 +107,17 @@ const BRANDING_REPLACEMENTS: BrandingReplacement[] = [
   // Environment variables (exclude OPENCODE_API_KEY)
   {
     pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g,
-    replacement: "KILO_$1",
+    replacement: "GGAI_$1",
     description: "Environment variable",
   },
   {
     pattern: /VITE_OPENCODE_/g,
-    replacement: "VITE_KILO_",
+    replacement: "VITE_GGAI_",
     description: "Vite env var",
   },
   {
     pattern: /window\.__OPENCODE__/g,
-    replacement: "window.__KILO__",
+    replacement: "window.__GGAI__",
     description: "Window global",
   },
   {
@@ -127,7 +127,7 @@ const BRANDING_REPLACEMENTS: BrandingReplacement[] = [
   },
   {
     pattern: /_EXTENSION_OPENCODE_/g,
-    replacement: "_EXTENSION_KILO_",
+    replacement: "_EXTENSION_GGAI_",
     description: "Extension env var",
   },
 ]
@@ -139,7 +139,7 @@ const PRESERVE_PATTERNS = [
   /\.opencode`/g, // Directory name in template strings
   /"\.opencode"/g, // Directory name in quotes
   /'\.opencode'/g, // Directory name in single quotes
-  /\/\/\s*kilocode_change/g, // Already has marker
+  /\/\/\s*ggai_change/g, // Already has marker
 ]
 
 /**
@@ -162,8 +162,8 @@ export function applyBrandingTransforms(content: string, verbose = false): { res
   let total = 0
 
   for (const line of lines) {
-    // Skip lines with kilocode_change marker (already customized)
-    if (line.includes("// kilocode_change")) {
+    // Skip lines with ggai_change marker (already customized)
+    if (line.includes("// ggai_change")) {
       transformed.push(line)
       continue
     }

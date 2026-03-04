@@ -4,23 +4,23 @@ import { createResizeObserver } from "@solid-primitives/resize-observer"
 import { useLocal } from "@/context/local"
 import { selectionFromLines, useFile, type FileSelection, type SelectedLineRange } from "@/context/file"
 import { createStore } from "solid-js/store"
-import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
-import { Select } from "@opencode-ai/ui/select"
-import { createAutoScroll } from "@opencode-ai/ui/hooks"
-import { Mark } from "@opencode-ai/ui/logo"
+import { ResizeHandle } from "@ggai/ui-core/resize-handle"
+import { Select } from "@ggai/ui-core/select"
+import { createAutoScroll } from "@ggai/ui-core/hooks"
+import { Mark } from "@ggai/ui-core/logo"
 
 import { useSync } from "@/context/sync"
 import { useLayout } from "@/context/layout"
-import { checksum, base64Encode } from "@opencode-ai/util/encode"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { checksum, base64Encode } from "@ggai/util/encode"
+import { useDialog } from "@ggai/ui-core/context/dialog"
 import { useLanguage } from "@/context/language"
 import { useNavigate, useParams } from "@solidjs/router"
-import { UserMessage } from "@kilocode/sdk/v2"
+import { UserMessage } from "@ggai/sdk/v2"
 import { useSDK } from "@/context/sdk"
 import { usePrompt } from "@/context/prompt"
 import { useComments } from "@/context/comments"
-import { Identifier } from "@/utils/id" // kilocode_change
-import { showToast } from "@opencode-ai/ui/toast" // kilocode_change
+import { Identifier } from "@/utils/id" // ggai_change
+import { showToast } from "@ggai/ui-core/toast" // ggai_change
 import { SessionHeader, NewSessionView } from "@/components/session"
 import { same } from "@/utils/same"
 import { createOpenReviewFile } from "@/pages/session/helpers"
@@ -56,7 +56,7 @@ export default function Page() {
     },
   })
 
-  // kilocode_change start - handle mode switch from question options
+  // ggai_change start - handle mode switch from question options
   let modeActionAbort: AbortController | undefined
 
   const waitForIdle = (sessionID: string, signal: AbortSignal) =>
@@ -153,7 +153,7 @@ export default function Page() {
         showToast({ title: language.t("common.requestFailed"), description: message })
       })
   }
-  // kilocode_change end
+  // ggai_change end
 
   const composer = createSessionComposerState()
 
@@ -1206,7 +1206,7 @@ export default function Page() {
             setPromptDockRef={(el) => {
               promptDock = el
             }}
-            onModeAction={handleModeAction} // kilocode_change
+            onModeAction={handleModeAction} // ggai_change
           />
 
           <Show when={desktopReviewOpen()}>

@@ -3,12 +3,12 @@ import { Plugin } from "../plugin"
 import { map, filter, pipe, fromEntries, mapValues } from "remeda"
 import z from "zod"
 import { fn } from "@/util/fn"
-import type { AuthOuathResult, Hooks } from "@kilocode/plugin"
-import { NamedError } from "@opencode-ai/util/error"
+import type { AuthOuathResult, Hooks } from "@ggai/plugin"
+import { NamedError } from "@ggai/util/error"
 import { Auth } from "@/auth"
-import { Telemetry } from "@kilocode/kilo-telemetry" // kilocode_change
-import { ModelCache } from "./model-cache" // kilocode_change
-import { scheduleDisposeAll } from "../kilocode/dispose" // kilocode_change
+import { Telemetry } from "@ggai/telemetry" // ggai_change
+import { ModelCache } from "./model-cache" // ggai_change
+import { scheduleDisposeAll } from "../ggai/dispose" // ggai_change
 
 export namespace ProviderAuth {
   const state = Instance.state(async () => {
@@ -114,19 +114,19 @@ export namespace ProviderAuth {
           await Auth.set(input.providerID, info)
         }
 
-        // kilocode_change start - Update telemetry identity on Kilo auth
+        // ggai_change start - Update telemetry identity on Kilo auth
         if (input.providerID === "kilo") {
           const token = "refresh" in result ? result.access : result.key
           const accountId = "refresh" in result ? result.accountId : undefined
           await Telemetry.updateIdentity(token, accountId)
         }
         Telemetry.trackAuthSuccess(input.providerID)
-        // kilocode_change end
+        // ggai_change end
 
-        // kilocode_change start - invalidate provider/model cache after auth change
+        // ggai_change start - invalidate provider/model cache after auth change
         ModelCache.clear(input.providerID)
         scheduleDisposeAll()
-        // kilocode_change end
+        // ggai_change end
 
         return
       }
@@ -145,10 +145,10 @@ export namespace ProviderAuth {
         type: "api",
         key: input.key,
       })
-      // kilocode_change start - invalidate provider/model cache after auth change
+      // ggai_change start - invalidate provider/model cache after auth change
       ModelCache.clear(input.providerID)
       scheduleDisposeAll()
-      // kilocode_change end
+      // ggai_change end
     },
   )
 

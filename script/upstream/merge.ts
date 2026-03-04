@@ -379,7 +379,7 @@ async function main() {
     logger.list(mergeResult.conflicts)
 
     // Since we applied all branding transforms pre-merge, remaining conflicts should be minimal.
-    // These are likely files with kilocode_change markers or actual logic differences.
+    // These are likely files with ggai_change markers or actual logic differences.
 
     // Step 7a: Skip files that shouldn't exist in Kilo
     logger.info("Removing files that shouldn't exist in Kilo...")
@@ -509,7 +509,7 @@ async function main() {
       logger.warn(`${remaining.length} conflicts require manual resolution:`)
       logger.list(remaining)
       logger.info("")
-      logger.info("These conflicts likely contain kilocode_change markers or have actual code differences.")
+      logger.info("These conflicts likely contain ggai_change markers or have actual code differences.")
       logger.info("After resolving conflicts, run:")
       logger.info("  git add -A && git commit -m 'resolve merge conflicts'")
 

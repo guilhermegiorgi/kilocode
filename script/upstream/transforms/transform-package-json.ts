@@ -171,30 +171,30 @@ export interface PackageJsonOptions {
 const PACKAGE_NAME_MAP: Record<string, string> = {
   "opencode-ai": "@kilocode/cli",
   "@opencode-ai/cli": "@kilocode/cli",
-  "@opencode-ai/sdk": "@kilocode/sdk",
-  "@opencode-ai/plugin": "@kilocode/plugin",
+  "@opencode-ai/sdk": "@ggai/sdk",
+  "@opencode-ai/plugin": "@ggai/plugin",
 }
 
 // Kilo-specific dependencies to inject into specific packages
 // NOTE: When adding new Kilo-specific workspace dependencies (packages starting with @kilocode/kilo-*),
 // add them here to prevent them from being removed during upstream merges
-const KILO_DEPENDENCIES: Record<string, Record<string, string>> = {
+const GGAI_DEPENDENCIES: Record<string, Record<string, string>> = {
   // packages/opencode/package.json needs these
   "packages/opencode/package.json": {
-    "@kilocode/kilo-gateway": "workspace:*",
-    "@kilocode/kilo-telemetry": "workspace:*",
+    "@ggai/gateway": "workspace:*",
+    "@ggai/telemetry": "workspace:*",
   },
   // packages/app/package.json needs these
   "packages/app/package.json": {
-    "@kilocode/kilo-i18n": "workspace:*",
+    "@ggai/i18n": "workspace:*",
   },
 }
 
 // Packages that should have their name transformed
 const TRANSFORM_PACKAGE_NAMES: Record<string, string> = {
   "packages/opencode/package.json": "@kilocode/cli",
-  "packages/plugin/package.json": "@kilocode/plugin",
-  "packages/sdk/js/package.json": "@kilocode/sdk",
+  "packages/plugin/package.json": "@ggai/plugin",
+  "packages/sdk/js/package.json": "@ggai/sdk",
 }
 
 /**
@@ -375,7 +375,7 @@ export async function transformPackageJson(file: string, options: PackageJsonOpt
     }
 
     // 8. Inject Kilo-specific dependencies
-    const kiloDeps = KILO_DEPENDENCIES[relativePath]
+    const kiloDeps = GGAI_DEPENDENCIES[relativePath]
     if (kiloDeps) {
       pkg.dependencies = pkg.dependencies || {}
       for (const [name, version] of Object.entries(kiloDeps)) {
@@ -582,7 +582,7 @@ export async function transformAllPackageJson(options: PackageJsonOptions = {}):
       }
 
       // 8. Inject Kilo-specific dependencies
-      const kiloDeps = KILO_DEPENDENCIES[path]
+      const kiloDeps = GGAI_DEPENDENCIES[path]
       if (kiloDeps) {
         pkg.dependencies = pkg.dependencies || {}
         for (const [name, version] of Object.entries(kiloDeps)) {

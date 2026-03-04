@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Kilo",
-  "identifier": "ai.kilo.desktop.dev",
-  "mainBinaryName": "Kilo",
+  "productName": "Genesis Grid AI",
+  "identifier": "ai.genesisgrid.desktop.dev",
+  "mainBinaryName": "Genesis Grid AI",
   "version": "../package.json",
   "build": {
     "beforeDevCommand": "bun run dev",
@@ -33,7 +33,7 @@
     ],
     "active": true,
     "targets": ["deb", "rpm", "dmg", "nsis", "app"],
-    "externalBin": ["sidecars/kilo-cli"],
+    "externalBin": ["sidecars/ggai-cli"],
     "linux": {
       "rpm": {
         "compression": {

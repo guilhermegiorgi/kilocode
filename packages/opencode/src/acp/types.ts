@@ -1,5 +1,5 @@
 import type { McpServer } from "@agentclientprotocol/sdk"
-import type { KiloClient } from "@kilocode/sdk/v2"
+import type { KiloClient } from "@ggai/sdk/v2"
 
 export interface ACPSessionState {
   id: string

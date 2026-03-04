@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// ggai_change - new file
 import { describe, expect, it } from "bun:test"
 import { formatMarkdownTables } from "../../../src/cli/cmd/tui/util/markdown"
 

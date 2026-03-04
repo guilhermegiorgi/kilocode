@@ -5,7 +5,7 @@ import z from "zod"
 import { Identifier } from "../id/id"
 import { Log } from "../util/log"
 import { Instance } from "../project/instance"
-import { lazy } from "@opencode-ai/util/lazy"
+import { lazy } from "@ggai/util/lazy"
 import { Shell } from "@/shell/shell"
 import { Plugin } from "@/plugin"
 
@@ -186,7 +186,7 @@ export namespace Pty {
       ...input.env,
       ...shellEnv.env,
       TERM: "xterm-256color",
-      KILO_TERMINAL: "1",
+      GGAI_TERMINAL: "1",
     } as Record<string, string>
 
     if (process.platform === "win32") {

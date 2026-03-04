@@ -3,11 +3,11 @@ import tailwindcss from "@tailwindcss/vite"
 import { fileURLToPath } from "url"
 import { resolve as resolvePath } from "path"
 
-// kilocode_change start
+// ggai_change start
 const kiloUiDir = resolvePath(fileURLToPath(new URL(".", import.meta.url)), "../kilo-ui").replace(/\\/g, "/") // Normalize to forward slashes for cross-platform compatibility
 
 /**
- * Vite plugin that redirects @opencode-ai/ui imports to @kilocode/kilo-ui,
+ * Vite plugin that redirects @opencode-ai/ui imports to @ggai/ui,
  * but only for importers OUTSIDE of kilo-ui itself. This avoids circular
  * resolution when kilo-ui re-exports from @opencode-ai/ui.
  * Excludes audio/* and fonts/* which are binary assets.
@@ -22,12 +22,12 @@ const kiloUiAlias = {
     if (normalizedImporter?.startsWith(kiloUiDir)) return
     const sub = source.replace("@opencode-ai/ui", "")
     if (sub.startsWith("/audio/") || sub.startsWith("/fonts/")) return
-    return this.resolve(source.replace("@opencode-ai/ui", "@kilocode/kilo-ui"), importer, {
+    return this.resolve(source.replace("@opencode-ai/ui", "@ggai/ui"), importer, {
       skipSelf: true,
     })
   },
 }
-// kilocode_change end
+// ggai_change end
 
 /**
  * @type {import("vite").PluginOption}
@@ -48,7 +48,7 @@ export default [
       }
     },
   },
-  kiloUiAlias, // kilocode_change
+  kiloUiAlias, // ggai_change
   tailwindcss(),
   solidPlugin(),
 ]

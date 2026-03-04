@@ -1,6 +1,6 @@
-# Contributing to Kilo CLI
+# Contributing to GG.AI CLI
 
-See [the Documentation for details on contributing](https://kilo.ai/docs/contributing).
+See [the Documentation for details on contributing](https://genesisgrid.ai/docs/contributing).
 
 ## TL;DR
 
@@ -12,9 +12,9 @@ There are lots of ways to contribute to the project:
 - **Feature Requests:** Suggest new features or improvements
 - **Community Support:** Help other users in the community
 
-The Kilo Community is [on Discord](https://kilo.ai/discord).
+The GG.AI Community is [on Discord](https://genesisgrid.ai/discord).
 
-## Developing Kilo CLI
+## Developing GG.AI CLI
 
 - **Requirements:** Bun 1.3+
 - Install dependencies and start the dev server from the repo root:
@@ -26,13 +26,13 @@ The Kilo Community is [on Discord](https://kilo.ai/discord).
 
 ### Running against a different directory
 
-By default, `bun dev` runs Kilo CLI in the `packages/kilo-cli` directory. To run it against a different directory or repository:
+By default, `bun dev` runs GG.AI CLI in the `packages/opencode` directory. To run it against a different directory or repository:
 
 ```bash
 bun dev <directory>
 ```
 
-To run Kilo CLI in the root of the repo itself:
+To run GG.AI CLI in the root of the repo itself:
 
 ```bash
 bun dev .
@@ -43,20 +43,20 @@ bun dev .
 To compile a standalone executable:
 
 ```bash
-./packages/kilo-cli/script/build.ts --single
+./packages/opencode/script/build.ts --single
 ```
 
 Then run it with:
 
 ```bash
-./packages/kilo-cli/dist/kilo-cli-<platform>/bin/kilo
+./packages/opencode/dist/ggai-cli-<platform>/bin/ggai
 ```
 
 Replace `<platform>` with your platform (e.g., `darwin-arm64`, `linux-x64`).
 
-### Understanding bun dev vs kilo
+### Understanding bun dev vs ggai
 
-During development, `bun dev` is the local equivalent of the built `kilo` command. Both run the same CLI interface:
+During development, `bun dev` is the local equivalent of the built `ggai` command. Both run the same CLI interface:
 
 ```bash
 # Development (from project root)
@@ -65,9 +65,9 @@ bun dev serve            # Start headless API server
 bun dev web              # Start server + open web interface
 
 # Production
-kilo --help          # Show all available commands
-kilo serve           # Start headless API server
-kilo web             # Start server + open web interface
+ggai --help          # Show all available commands
+ggai serve           # Start headless API server
+ggai web             # Start server + open web interface
 ```
 
 ### Pull Request Expectations

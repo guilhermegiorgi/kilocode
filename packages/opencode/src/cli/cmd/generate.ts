@@ -11,11 +11,11 @@ export const GenerateCommand = {
         if (!operation?.operationId) continue
         // @ts-expect-error
         operation["x-codeSamples"] = [
-          // kilocode_change start
+          // ggai_change start
           {
             lang: "js",
             source: [
-              `import { createKiloClient } from "@kilocode/sdk"`,
+              `import { createKiloClient } from "@ggai/sdk"`,
               ``,
               `const client = createKiloClient()`,
               `await client.${operation.operationId}({`,
@@ -23,7 +23,7 @@ export const GenerateCommand = {
               `})`,
             ].join("\n"),
           },
-          // kilocode_change end,
+          // ggai_change end,
         ]
       }
     }

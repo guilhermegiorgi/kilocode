@@ -21,14 +21,14 @@ export const collectOpenProjectDeepLinks = (urls: string[]) =>
   urls.map(parseDeepLink).filter((directory): directory is string => !!directory)
 
 type OpenCodeWindow = Window & {
-  __KILO__?: {
+  __GGAI__?: {
     deepLinks?: string[]
   }
 }
 
 export const drainPendingDeepLinks = (target: OpenCodeWindow) => {
-  const pending = target.__KILO__?.deepLinks ?? []
+  const pending = target.__GGAI__?.deepLinks ?? []
   if (pending.length === 0) return []
-  if (target.__KILO__) target.__KILO__.deepLinks = []
+  if (target.__GGAI__) target.__GGAI__.deepLinks = []
   return pending
 }

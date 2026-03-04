@@ -203,7 +203,7 @@ export function getRecommendation(
     case "code":
       return {
         recommendation: "manual",
-        reason: "Code files need manual review for kilocode_change markers",
+        reason: "Code files need manual review for ggai_change markers",
       }
     case "config":
       return {

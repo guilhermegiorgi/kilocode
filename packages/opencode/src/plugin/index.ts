@@ -1,19 +1,19 @@
-import type { Hooks, PluginInput, Plugin as PluginInstance } from "@kilocode/plugin"
+import type { Hooks, PluginInput, Plugin as PluginInstance } from "@ggai/plugin"
 import { Config } from "../config/config"
 import { Bus } from "../bus"
 import { Log } from "../util/log"
-import { createKiloClient } from "@kilocode/sdk"
+import { createKiloClient } from "@ggai/sdk"
 import { Server } from "../server/server"
 import { BunProc } from "../bun"
 import { Instance } from "../project/instance"
 import { Flag } from "../flag/flag"
 import { CodexAuthPlugin } from "./codex"
 import { Session } from "../session"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { CopilotAuthPlugin } from "./copilot"
 import { gitlabAuthPlugin as GitlabAuthPlugin } from "@gitlab/opencode-gitlab-auth"
 
-import { KiloAuthPlugin } from "@kilocode/kilo-gateway" // kilocode_change
+import { KiloAuthPlugin } from "@ggai/gateway" // ggai_change
 
 export namespace Plugin {
   const log = Log.create({ service: "plugin" })
@@ -21,13 +21,13 @@ export namespace Plugin {
   const BUILTIN = ["opencode-anthropic-auth@0.0.13"]
 
   // Built-in plugins that are directly imported (not installed from npm)
-  // kilocode_change start
+  // ggai_change start
   const INTERNAL_PLUGINS: PluginInstance[] = [
     KiloAuthPlugin,
     CodexAuthPlugin,
     CopilotAuthPlugin,
     GitlabAuthPlugin as unknown as PluginInstance,
-  ] // kilocode_change end
+  ] // ggai_change end
 
   const state = Instance.state(async () => {
     const client = createKiloClient({
@@ -57,7 +57,7 @@ export namespace Plugin {
 
     let plugins = config.plugin ?? []
     if (plugins.length) await Config.waitForDependencies()
-    if (!Flag.KILO_DISABLE_DEFAULT_PLUGINS) {
+    if (!Flag.GGAI_DISABLE_DEFAULT_PLUGINS) {
       plugins = [...BUILTIN, ...plugins]
     }
 

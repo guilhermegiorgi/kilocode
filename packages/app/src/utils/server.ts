@@ -1,4 +1,4 @@
-import { createKiloClient } from "@kilocode/sdk/v2/client"
+import { createKiloClient } from "@ggai/sdk/v2/client"
 import type { ServerConnection } from "@/context/server"
 
 export function createSdkForServer({

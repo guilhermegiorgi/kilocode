@@ -55,33 +55,33 @@ const extraArgs = (() => {
 const [serverPort, webPort] = await Promise.all([freePort(), freePort()])
 
 const sandbox = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-e2e-"))
-const keepSandbox = process.env.KILO_E2E_KEEP_SANDBOX === "1"
+const keepSandbox = process.env.GGAI_E2E_KEEP_SANDBOX === "1"
 
 const serverEnv = {
   ...process.env,
-  KILO_DISABLE_SHARE: process.env.KILO_DISABLE_SHARE ?? "true", // kilocode_change
-  KILO_DISABLE_SESSION_INGEST: "true", // kilocode_change
-  KILO_DISABLE_LSP_DOWNLOAD: "true",
-  KILO_DISABLE_DEFAULT_PLUGINS: "true",
-  KILO_EXPERIMENTAL_DISABLE_FILEWATCHER: "true",
-  KILO_TEST_HOME: path.join(sandbox, "home"),
+  GGAI_DISABLE_SHARE: process.env.GGAI_DISABLE_SHARE ?? "true", // ggai_change
+  GGAI_DISABLE_SESSION_INGEST: "true", // ggai_change
+  GGAI_DISABLE_LSP_DOWNLOAD: "true",
+  GGAI_DISABLE_DEFAULT_PLUGINS: "true",
+  GGAI_EXPERIMENTAL_DISABLE_FILEWATCHER: "true",
+  GGAI_TEST_HOME: path.join(sandbox, "home"),
   XDG_DATA_HOME: path.join(sandbox, "share"),
   XDG_CACHE_HOME: path.join(sandbox, "cache"),
   XDG_CONFIG_HOME: path.join(sandbox, "config"),
   XDG_STATE_HOME: path.join(sandbox, "state"),
-  KILO_E2E_PROJECT_DIR: repoDir,
-  KILO_E2E_SESSION_TITLE: "E2E Session",
-  KILO_E2E_MESSAGE: "Seeded for UI e2e",
-  KILO_E2E_MODEL: "kilo/kilo/auto", // kilocode_change
-  KILO_CLIENT: "app",
+  GGAI_E2E_PROJECT_DIR: repoDir,
+  GGAI_E2E_SESSION_TITLE: "E2E Session",
+  GGAI_E2E_MESSAGE: "Seeded for UI e2e",
+  GGAI_E2E_MODEL: "kilo/kilo/auto", // ggai_change
+  GGAI_CLIENT: "app",
 } satisfies Record<string, string>
 
 const runnerEnv = {
   ...serverEnv,
   PLAYWRIGHT_SERVER_HOST: "127.0.0.1",
   PLAYWRIGHT_SERVER_PORT: String(serverPort),
-  VITE_KILO_SERVER_HOST: "127.0.0.1",
-  VITE_KILO_SERVER_PORT: String(serverPort),
+  VITE_GGAI_SERVER_HOST: "127.0.0.1",
+  VITE_GGAI_SERVER_PORT: String(serverPort),
   PLAYWRIGHT_PORT: String(webPort),
 } satisfies Record<string, string>
 
@@ -158,7 +158,7 @@ try {
     const servermod = await import("../../opencode/src/server/server")
     inst = await import("../../opencode/src/project/instance")
     server = servermod.Server.listen({ port: serverPort, hostname: "127.0.0.1" })
-    console.log(`kilo server listening on http://127.0.0.1:${serverPort}`) // kilocode_change
+    console.log(`kilo server listening on http://127.0.0.1:${serverPort}`) // ggai_change
 
     await waitForHealth(`http://127.0.0.1:${serverPort}/global/health`)
     runner = Bun.spawn(["bun", "test:e2e", ...extraArgs], {

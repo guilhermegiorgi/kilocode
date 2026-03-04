@@ -6,9 +6,9 @@ import type {
   ProviderAuthResponse,
   ProviderListResponse,
   Todo,
-} from "@kilocode/sdk/v2/client"
-import { showToast } from "@opencode-ai/ui/toast"
-import { getFilename } from "@opencode-ai/util/path"
+} from "@ggai/sdk/v2/client"
+import { showToast } from "@ggai/ui-core/toast"
+import { getFilename } from "@ggai/util/path"
 import {
   createContext,
   createEffect,

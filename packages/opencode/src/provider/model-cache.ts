@@ -1,5 +1,5 @@
-// kilocode_change new file
-import { fetchKiloModels } from "@kilocode/kilo-gateway"
+// ggai_change new file
+import { fetchKiloModels } from "@ggai/gateway"
 import { Config } from "../config/config"
 import { Auth } from "../auth"
 import { Env } from "../env"
@@ -160,7 +160,7 @@ export namespace ModelCache {
    * @returns Fetched models
    */
   async function fetchModels(providerID: string, options: any): Promise<Record<string, any>> {
-    if (providerID === "kilo") {
+    if (["kilo", "opencode", "ggai"].includes(providerID)) {
       return fetchKiloModels(options)
     }
 
@@ -178,7 +178,7 @@ export namespace ModelCache {
   async function getAuthOptions(providerID: string): Promise<any> {
     const options: any = {}
 
-    if (providerID === "kilo") {
+    if (["kilo", "opencode", "ggai"].includes(providerID)) {
       // Get from Config
       const config = await Config.get()
       const providerConfig = config.provider?.[providerID]
@@ -186,11 +186,11 @@ export namespace ModelCache {
         options.kilocodeToken = providerConfig.options.apiKey
       }
 
-      // kilocode_change start
+      // ggai_change start
       if (providerConfig?.options?.kilocodeOrganizationId) {
         options.kilocodeOrganizationId = providerConfig.options.kilocodeOrganizationId
       }
-      // kilocode_change end
+      // ggai_change end
 
       // Get from Auth
       const auth = await Auth.get(providerID)
@@ -199,21 +199,25 @@ export namespace ModelCache {
           options.kilocodeToken = auth.key
         } else if (auth.type === "oauth") {
           options.kilocodeToken = auth.access
-          // kilocode_change start - read org ID from OAuth accountId for enterprise model filtering
+          // ggai_change start - read org ID from OAuth accountId for enterprise model filtering
           if (auth.accountId) {
             options.kilocodeOrganizationId = auth.accountId
           }
-          // kilocode_change end
+          // ggai_change end
         }
       }
 
       // Get from Env
       const env = Env.all()
-      if (env.KILO_API_KEY) {
-        options.kilocodeToken = env.KILO_API_KEY
-      }
-      if (env.KILO_ORG_ID) {
-        options.kilocodeOrganizationId = env.KILO_ORG_ID
+      if (providerID === "ggai") {
+        if (env.GGAI_API_KEY) options.kilocodeToken = env.GGAI_API_KEY
+        if (env.GGAI_ORG_ID) options.kilocodeOrganizationId = env.GGAI_ORG_ID
+      } else if (providerID === "kilo") {
+        if (env.KILO_API_KEY) options.kilocodeToken = env.KILO_API_KEY
+        if (env.KILO_ORG_ID) options.kilocodeOrganizationId = env.KILO_ORG_ID
+      } else if (providerID === "opencode") {
+        if (env.OPENCODE_API_KEY) options.kilocodeToken = env.OPENCODE_API_KEY
+        if (env.OPENCODE_ORG_ID) options.kilocodeOrganizationId = env.OPENCODE_ORG_ID
       }
 
       log.debug("auth options resolved", {

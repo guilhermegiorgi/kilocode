@@ -1,4 +1,4 @@
-import type { Message, Session, Part, FileDiff, SessionStatus, ProviderListResponse } from "@kilocode/sdk/v2"
+import type { Message, Session, Part, FileDiff, SessionStatus, ProviderListResponse } from "@ggai/sdk/v2"
 import { createSimpleContext } from "./helper"
 import { PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
 
@@ -26,7 +26,7 @@ export type NavigateToSessionFn = (sessionID: string) => void
 
 export type SessionHrefFn = (sessionID: string) => string
 
-export type OpenFileFn = (filePath: string, line?: number, column?: number) => void // kilocode_change
+export type OpenFileFn = (filePath: string, line?: number, column?: number) => void // ggai_change
 
 export const { use: useData, provider: DataProvider } = createSimpleContext({
   name: "Data",
@@ -35,7 +35,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
     directory: string
     onNavigateToSession?: NavigateToSessionFn
     onSessionHref?: SessionHrefFn
-    onOpenFile?: OpenFileFn // kilocode_change
+    onOpenFile?: OpenFileFn // ggai_change
   }) => {
     return {
       get store() {
@@ -46,7 +46,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
       },
       navigateToSession: props.onNavigateToSession,
       sessionHref: props.onSessionHref,
-      openFile: props.onOpenFile, // kilocode_change
+      openFile: props.onOpenFile, // ggai_change
     }
   },
 })

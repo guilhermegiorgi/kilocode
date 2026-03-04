@@ -2,11 +2,11 @@ name: "Setup Git Committer"
 description: "Create app token and configure git user"
 inputs:
   # kilocode_change start
-  kilo-maintainer-app-id:
-    description: "Kilo Maintainer GitHub App ID"
+  ggai-maintainer-app-id:
+    description: "GGAI Maintainer GitHub App ID"
     required: true
-  kilo-maintainer-app-secret:
-    description: "Kilo Maintainer GitHub App private key"
+  ggai-maintainer-app-secret:
+    description: "GGAI Maintainer GitHub App private key"
     required: true
   # kilocode_change end
 outputs:
@@ -24,8 +24,8 @@ runs:
       uses: actions/create-github-app-token@v2
       with:
         # kilocode_change start
-        app-id: ${{ inputs['kilo-maintainer-app-id'] }}
-        private-key: ${{ inputs['kilo-maintainer-app-secret'] }}
+        app-id: ${{ inputs['ggai-maintainer-app-id'] }}
+        private-key: ${{ inputs['ggai-maintainer-app-secret'] }}
         # kilocode_change end
         owner: ${{ github.repository_owner }}
 

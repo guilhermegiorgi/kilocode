@@ -1,4 +1,4 @@
-import { createKiloClient, type Event } from "@kilocode/sdk/v2"
+import { createKiloClient, type Event } from "@ggai/sdk/v2"
 import { createSimpleContext } from "./helper"
 import { createGlobalEmitter } from "@solid-primitives/event-bus"
 import { batch, onCleanup, onMount } from "solid-js"

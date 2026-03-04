@@ -10,7 +10,7 @@ import { createRequire } from "module"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const require = createRequire(import.meta.url)
 
-// kilocode_change start - variant detection matching bin/kilo logic
+// ggai_change start - variant detection matching bin/kilo logic
 const platformMap = {
   darwin: "darwin",
   linux: "linux",
@@ -105,7 +105,7 @@ function getPackageNames() {
 
 function findBinary() {
   const { platform } = detectPlatformAndArch()
-  const binaryName = platform === "windows" ? "kilo.exe" : "kilo"
+  const binaryName = platform === "windows" ? "ggai.exe" : "ggai"
   const names = getPackageNames()
 
   for (const packageName of names) {
@@ -124,7 +124,7 @@ function findBinary() {
 
   throw new Error(`Could not find any binary package. Tried: ${names.map((n) => `"${n}"`).join(", ")}`)
 }
-// kilocode_change end
+// ggai_change end
 
 function main() {
   if (os.platform() === "win32") {
@@ -134,7 +134,7 @@ function main() {
   }
 
   const { binaryPath } = findBinary()
-  const target = path.join(__dirname, "bin", ".kilo") // kilocode_change
+  const target = path.join(__dirname, "bin", ".kilo") // ggai_change
   if (fs.existsSync(target)) fs.unlinkSync(target)
   try {
     fs.linkSync(binaryPath, target)

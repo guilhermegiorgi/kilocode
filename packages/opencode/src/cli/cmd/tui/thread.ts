@@ -9,14 +9,14 @@ import { iife } from "@/util/iife"
 import { Log } from "@/util/log"
 import { withNetworkOptions, resolveNetworkOptions } from "@/cli/network"
 import { Filesystem } from "@/util/filesystem"
-import type { Event } from "@kilocode/sdk/v2"
+import type { Event } from "@ggai/sdk/v2"
 import type { EventSource } from "./context/sdk"
 import { win32DisableProcessedInput, win32InstallCtrlCGuard } from "./win32"
 import { TuiConfig } from "@/config/tui"
 import { Instance } from "@/project/instance"
 
 declare global {
-  const KILO_WORKER_PATH: string // kilocode_change
+  const GGAI_WORKER_PATH: string // ggai_change
 }
 
 type RpcClient = ReturnType<typeof Rpc.client<typeof rpc>>
@@ -47,12 +47,12 @@ function createEventSource(client: RpcClient): EventSource {
 
 export const TuiThreadCommand = cmd({
   command: "$0 [project]",
-  describe: "start kilo tui", // kilocode_change
+  describe: "start kilo tui", // ggai_change
   builder: (yargs) =>
     withNetworkOptions(yargs)
       .positional("project", {
         type: "string",
-        describe: "path to start kilo in", // kilocode_change
+        describe: "path to start kilo in", // ggai_change
       })
       .option("model", {
         type: "string",
@@ -106,7 +106,7 @@ export const TuiThreadCommand = cmd({
       const localWorker = new URL("./worker.ts", import.meta.url)
       const distWorker = new URL("./cli/cmd/tui/worker.js", import.meta.url)
       const workerPath = await iife(async () => {
-        if (typeof KILO_WORKER_PATH !== "undefined") return KILO_WORKER_PATH
+        if (typeof GGAI_WORKER_PATH !== "undefined") return GGAI_WORKER_PATH
         if (await Filesystem.exists(fileURLToPath(distWorker))) return distWorker
         return localWorker
       })
@@ -135,7 +135,7 @@ export const TuiThreadCommand = cmd({
       process.on("SIGUSR2", async () => {
         await client.call("reload", undefined)
       })
-      // kilocode_change start - graceful shutdown on external signals
+      // ggai_change start - graceful shutdown on external signals
       // The worker's postMessage for the RPC result may never be delivered
       // after shutdown because the worker's event loop drains. Send the
       // shutdown request without awaiting the response, wait for the worker
@@ -228,7 +228,7 @@ export const TuiThreadCommand = cmd({
         shutdownAndExit({ reason: "parent-exit", code: 0 })
       }, 1000)
       orphanWatch.unref()
-      // kilocode_change end
+      // ggai_change end
 
       const prompt = await iife(async () => {
         const piped = !process.stdin.isTTY ? await Bun.stdin.text() : undefined

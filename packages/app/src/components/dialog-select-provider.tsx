@@ -1,11 +1,11 @@
 import { Component, Show } from "solid-js"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { useDialog } from "@ggai/ui-core/context/dialog"
 import { popularProviders, useProviders } from "@/hooks/use-providers"
-import { Dialog } from "@opencode-ai/ui/dialog"
-import { List } from "@opencode-ai/ui/list"
-import { Tag } from "@opencode-ai/ui/tag"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
-import { iconNames, type IconName } from "@opencode-ai/ui/icons/provider"
+import { Dialog } from "@ggai/ui-core/dialog"
+import { List } from "@ggai/ui-core/list"
+import { Tag } from "@ggai/ui-core/tag"
+import { ProviderIcon } from "@ggai/ui-core/provider-icon"
+import { iconNames, type IconName } from "@ggai/ui-core/icons/provider"
 import { DialogConnectProvider } from "./dialog-connect-provider"
 import { useLanguage } from "@/context/language"
 import { DialogCustomProvider } from "./dialog-custom-provider"
@@ -22,9 +22,9 @@ export const DialogSelectProvider: Component = () => {
   const providers = useProviders()
   const language = useLanguage()
 
-  // kilocode_change start - Use "Recommended" terminology to match kilocode
+  // ggai_change start - Use "Recommended" terminology to match kilocode
   const popularGroup = () => language.t("dialog.provider.group.recommended")
-  // kilocode_change end
+  // ggai_change end
   const otherGroup = () => language.t("dialog.provider.group.other")
   const customLabel = () => language.t("settings.providers.tag.custom")
   const note = (id: string) => {
@@ -72,17 +72,17 @@ export const DialogSelectProvider: Component = () => {
           <div class="px-1.25 w-full flex items-center gap-x-3">
             <ProviderIcon data-slot="list-item-extra-icon" id={icon(i.id)} />
             <span>{i.name}</span>
-            {/* kilocode_change start - Provider tags and notes */}
-            <Show when={i.id === "kilo"}>
+            {/* ggai_change start - Provider tags and notes */}
+            <Show when={i.id === "ggai" || i.id === "kilo"}>
               <Tag>{language.t("dialog.provider.tag.recommended")}</Tag>
-              <div class="text-14-regular text-text-weak">{language.t("dialog.provider.kilo.note")}</div>
-            </Show>
-            {/* kilocode_change end */}
-            <Show when={i.id === CUSTOM_ID}>
-              <Tag>{language.t("settings.providers.tag.custom")}</Tag>
             </Show>
             <Show when={i.id === "opencode"}>
               <Tag>{language.t("dialog.provider.tag.recommended")}</Tag>
+              <div class="text-14-regular text-text-weak">{language.t("dialog.provider.opencode.note")}</div>
+            </Show>
+            {/* ggai_change end */}
+            <Show when={i.id === CUSTOM_ID}>
+              <Tag>{language.t("settings.providers.tag.custom")}</Tag>
             </Show>
             <Show when={note(i.id)}>{(value) => <div class="text-14-regular text-text-weak">{value()}</div>}</Show>
           </div>

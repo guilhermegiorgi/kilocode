@@ -22,13 +22,13 @@ import { SystemPrompt } from "./system"
 import { Flag } from "@/flag/flag"
 import { PermissionNext } from "@/permission/next"
 import { Auth } from "@/auth"
-import { DEFAULT_HEADERS } from "@/kilocode/const" // kilocode_change
-import { Telemetry } from "@kilocode/kilo-telemetry" // kilocode_change
-// kilocode_change start
-import { getKiloProjectId } from "@/kilocode/project-id"
-import { HEADER_PROJECTID, HEADER_MACHINEID, HEADER_TASKID } from "@kilocode/kilo-gateway"
-import { Identity } from "@kilocode/kilo-telemetry"
-// kilocode_change end
+import { DEFAULT_HEADERS } from "@/ggai/const" // ggai_change
+import { Telemetry } from "@ggai/telemetry" // ggai_change
+// ggai_change start
+import { getKiloProjectId } from "@/ggai/project-id"
+import { HEADER_PROJECTID, HEADER_MACHINEID, HEADER_TASKID } from "@ggai/gateway"
+import { Identity } from "@ggai/telemetry"
+// ggai_change end
 
 export namespace LLM {
   const log = Log.create({ service: "llm" })
@@ -74,9 +74,9 @@ export namespace LLM {
     const system = []
     system.push(
       [
-        // kilocode_change start - soul defines core identity and personality
+        // ggai_change start - soul defines core identity and personality
         ...(isCodex ? [] : [SystemPrompt.soul()]),
-        // kilocode_change end
+        // ggai_change end
         // use agent prompt otherwise provider prompt
         // For Codex sessions, skip SystemPrompt.provider() since it's sent via options.instructions
         ...(input.agent.prompt ? [input.agent.prompt] : isCodex ? [] : SystemPrompt.provider(input.model)),
@@ -118,9 +118,9 @@ export namespace LLM {
       mergeDeep(variant),
     )
     if (isCodex) {
-      // kilocode_change start - prepend soul to codex instructions
+      // ggai_change start - prepend soul to codex instructions
       options.instructions = SystemPrompt.soul() + "\n" + SystemPrompt.instructions()
-      // kilocode_change end
+      // ggai_change end
     }
 
     const params = await Plugin.trigger(
@@ -156,11 +156,11 @@ export namespace LLM {
       },
     )
 
-    // kilocode_change start - resolve project ID and machine ID for kilo provider
-    const isKilo = input.model.api.npm === "@kilocode/kilo-gateway"
+    // ggai_change start - resolve project ID and machine ID for kilo provider
+    const isKilo = input.model.api.npm === "@ggai/gateway"
     const kiloProjectId = isKilo ? await getKiloProjectId().catch(() => undefined) : undefined
     const machineId = isKilo ? await Identity.getMachineId().catch(() => undefined) : undefined
-    // kilocode_change end
+    // ggai_change end
 
     const maxOutputTokens =
       isCodex || provider.id.includes("github-copilot") ? undefined : ProviderTransform.maxOutputTokens(input.model)
@@ -229,17 +229,17 @@ export namespace LLM {
               "x-opencode-project": Instance.project.id,
               "x-opencode-session": input.sessionID,
               "x-opencode-request": input.user.id,
-              "x-kilo-client": Flag.KILO_CLIENT,
+              "x-kilo-client": Flag.GGAI_CLIENT,
             }
           : input.model.providerID !== "anthropic"
-            ? DEFAULT_HEADERS // kilocode_change
+            ? DEFAULT_HEADERS // ggai_change
             : undefined),
         ...(isKilo && input.agent.name ? { "x-kilocode-mode": input.agent.name.toLowerCase() } : {}),
-        // kilocode_change start - add project ID, machine ID, and task ID headers for kilo provider
+        // ggai_change start - add project ID, machine ID, and task ID headers for kilo provider
         ...(isKilo && kiloProjectId ? { [HEADER_PROJECTID]: kiloProjectId } : {}),
         ...(isKilo && machineId ? { [HEADER_MACHINEID]: machineId } : {}),
         ...(isKilo ? { [HEADER_TASKID]: input.sessionID } : {}),
-        // kilocode_change end
+        // ggai_change end
         ...input.model.headers,
         ...headers,
       },
@@ -267,14 +267,14 @@ export namespace LLM {
           },
         ],
       }),
-      // kilocode_change start - enable telemetry by default with custom PostHog tracer
+      // ggai_change start - enable telemetry by default with custom PostHog tracer
       experimental_telemetry: {
         isEnabled: cfg.experimental?.openTelemetry !== false,
         recordInputs: false, // Prevent recording prompts, messages, tool args
         recordOutputs: false, // Prevent recording completions, tool results
         tracer: Telemetry.getTracer() ?? undefined,
       },
-      // kilocode_change end
+      // ggai_change end
     })
   }
 

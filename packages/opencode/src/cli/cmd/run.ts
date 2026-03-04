@@ -7,7 +7,7 @@ import { Flag } from "../../flag/flag"
 import { bootstrap } from "../bootstrap"
 import { EOL } from "os"
 import { Filesystem } from "../../util/filesystem"
-import { createKiloClient, type Message, type KiloClient, type ToolPart } from "@kilocode/sdk/v2"
+import { createKiloClient, type Message, type KiloClient, type ToolPart } from "@ggai/sdk/v2"
 import { Server } from "../../server/server"
 import { Provider } from "../../provider/provider"
 import { Agent } from "../../agent/agent"
@@ -220,7 +220,7 @@ function normalizePath(input?: string) {
 
 export const RunCommand = cmd({
   command: "run [message..]",
-  describe: "run kilo with a message", // kilocode_change
+  describe: "run kilo with a message", // ggai_change
   builder: (yargs: Argv) => {
     return (
       yargs
@@ -298,14 +298,14 @@ export const RunCommand = cmd({
           describe: "show thinking blocks",
           default: false,
         })
-        // kilocode_change start - auto approve all permissions
+        // ggai_change start - auto approve all permissions
         .option("auto", {
           type: "boolean",
           describe: "auto-approve all permissions (for autonomous/pipeline usage)",
           default: false,
         })
     )
-    // kilocode_change end
+    // ggai_change end
   },
   handler: async (args) => {
     let message = [...args.message, ...(args["--"] || [])]
@@ -400,7 +400,7 @@ export const RunCommand = cmd({
     async function share(sdk: KiloClient, sessionID: string) {
       const cfg = await sdk.config.get()
       if (!cfg.data) return
-      if (cfg.data.share !== "auto" && !Flag.KILO_AUTO_SHARE && !args.share) return
+      if (cfg.data.share !== "auto" && !Flag.GGAI_AUTO_SHARE && !args.share) return
       const res = await sdk.session.share({ sessionID }).catch((error) => {
         if (error instanceof Error && error.message.includes("disabled")) {
           UI.println(UI.Style.TEXT_DANGER_BOLD + "!  " + error.message)
@@ -549,7 +549,7 @@ export const RunCommand = cmd({
             const permission = event.properties
             if (permission.sessionID !== sessionID) continue
 
-            // kilocode_change start - In auto mode, automatically approve all permissions without prompting
+            // ggai_change start - In auto mode, automatically approve all permissions without prompting
             if (args.auto) {
               await sdk.permission.respond({
                 sessionID,
@@ -558,7 +558,7 @@ export const RunCommand = cmd({
               })
               continue
             }
-            // kilocode_change end
+            // ggai_change end
 
             UI.println(
               UI.Style.TEXT_WARNING_BOLD + "!",

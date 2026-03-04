@@ -1,15 +1,15 @@
-import type { ProviderAuthAuthorization } from "@kilocode/sdk/v2/client"
-import { Button } from "@opencode-ai/ui/button"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
-import { Dialog } from "@opencode-ai/ui/dialog"
-import { Icon } from "@opencode-ai/ui/icon"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import type { IconName } from "@opencode-ai/ui/icons/provider"
-import { List, type ListRef } from "@opencode-ai/ui/list"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
-import { Spinner } from "@opencode-ai/ui/spinner"
-import { TextField } from "@opencode-ai/ui/text-field"
-import { showToast } from "@opencode-ai/ui/toast"
+import type { ProviderAuthAuthorization } from "@ggai/sdk/v2/client"
+import { Button } from "@ggai/ui-core/button"
+import { useDialog } from "@ggai/ui-core/context/dialog"
+import { Dialog } from "@ggai/ui-core/dialog"
+import { Icon } from "@ggai/ui-core/icon"
+import { IconButton } from "@ggai/ui-core/icon-button"
+import type { IconName } from "@ggai/ui-core/icons/provider"
+import { List, type ListRef } from "@ggai/ui-core/list"
+import { ProviderIcon } from "@ggai/ui-core/provider-icon"
+import { Spinner } from "@ggai/ui-core/spinner"
+import { TextField } from "@ggai/ui-core/text-field"
+import { showToast } from "@ggai/ui-core/toast"
 import { createMemo, Match, onCleanup, onMount, Switch } from "solid-js"
 import { createStore, produce } from "solid-js/store"
 import { Link } from "@/components/link"
@@ -270,21 +270,21 @@ export function DialogConnectProvider(props: { provider: string }) {
     return (
       <div class="flex flex-col gap-6">
         <Switch>
-          {/* kilocode_change start */}
-          <Match when={provider().id === "kilo"}>
+          {/* ggai_change start */}
+          <Match when={provider().id === "opencode"}>
             <div class="flex flex-col gap-4">
-              <div class="text-14-regular text-text-base">{language.t("provider.connect.kiloGateway.line1")}</div>
-              <div class="text-14-regular text-text-base">{language.t("provider.connect.kiloGateway.line2")}</div>
+              <div class="text-14-regular text-text-base">{language.t("provider.connect.opencodeZen.line1")}</div>
+              <div class="text-14-regular text-text-base">{language.t("provider.connect.opencodeZen.line2")}</div>
               <div class="text-14-regular text-text-base">
-                {language.t("provider.connect.kiloGateway.visit.prefix")}
-                <Link href="https://kilo.ai" tabIndex={-1}>
-                  {language.t("provider.connect.kiloGateway.visit.link")}
+                {language.t("provider.connect.opencodeZen.visit.prefix")}
+                <Link href="https://gg.ai" tabIndex={-1}>
+                  {language.t("provider.connect.opencodeZen.visit.link")}
                 </Link>
-                {language.t("provider.connect.kiloGateway.visit.suffix")}
+                {language.t("provider.connect.opencodeZen.visit.suffix")}
               </div>
             </div>
           </Match>
-          {/* kilocode_change end */}
+          {/* ggai_change end */}
           <Match when={true}>
             <div class="text-14-regular text-text-base">
               {language.t("provider.connect.apiKey.description", { provider: provider().name })}

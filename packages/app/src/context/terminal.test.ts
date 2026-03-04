@@ -8,7 +8,7 @@ beforeAll(async () => {
     useNavigate: () => () => undefined,
     useParams: () => ({}),
   }))
-  mock.module("@opencode-ai/ui/context", () => ({
+  mock.module("@ggai/ui-core/context", () => ({
     createSimpleContext: () => ({
       use: () => undefined,
       provider: () => undefined,

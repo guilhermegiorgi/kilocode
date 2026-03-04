@@ -12,8 +12,8 @@ jobs:
     with:
       username: ${{ github.event.pull_request.user.login }}
     secrets:
-      kilo-maintainer-app-id: ${{ secrets.KILO_MAINTAINER_APP_ID }}
-      kilo-maintainer-app-secret: ${{ secrets.KILO_MAINTAINER_APP_SECRET }}
+      kilo-maintainer-app-id: ${{ secrets.GGAI_MAINTAINER_APP_ID }}
+      kilo-maintainer-app-secret: ${{ secrets.GGAI_MAINTAINER_APP_SECRET }}
 
   check-duplicates:
     needs: check-author
@@ -74,8 +74,8 @@ jobs:
         if: steps.team-check.outputs.is_team != 'true'
         env:
           # kilocode_change start
-          KILO_API_KEY: ${{ secrets.KILO_API_KEY }}
-          KILO_ORG_ID: ${{ secrets.KILO_ORG_ID }}
+          GGAI_API_KEY: ${{ secrets.GGAI_API_KEY }}
+          GGAI_ORG_ID: ${{ secrets.GGAI_ORG_ID }}
           # kilocode_change end
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}

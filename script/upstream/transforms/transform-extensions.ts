@@ -54,18 +54,18 @@ const EXTENSION_REPLACEMENTS: ExtensionReplacement[] = [
   // GitHub/Repository references
   {
     pattern: /repository\s*=\s*"[^"]*anomalyco\/opencode[^"]*"/g,
-    replacement: 'repository = "https://github.com/Kilo-Org/kilocode"',
+    replacement: 'repository = "https://github.com/genesisgrid/kilocode"',
     description: "Repository URL",
     fileTypes: [".toml"],
   },
   {
     pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    replacement: "github.com/genesisgrid/kilocode",
     description: "GitHub URL",
   },
   {
     pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    replacement: "genesisgrid/kilocode",
     description: "GitHub repo",
   },
 
@@ -87,7 +87,7 @@ const EXTENSION_REPLACEMENTS: ExtensionReplacement[] = [
   // Environment variables
   {
     pattern: /_EXTENSION_OPENCODE_/g,
-    replacement: "_EXTENSION_KILO_",
+    replacement: "_EXTENSION_GGAI_",
     description: "Extension env var",
   },
   {

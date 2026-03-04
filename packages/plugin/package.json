@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@kilocode/plugin",
+  "name": "@ggai/plugin",
   "version": "7.0.37",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kilo-Org/kilocode",
+    "url": "https://github.com/genesisgrid/kilocode",
     "directory": "packages/plugin"
   },
   "scripts": {
@@ -21,7 +21,7 @@
     "dist"
   ],
   "dependencies": {
-    "@kilocode/sdk": "workspace:*",
+    "@ggai/sdk": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import path from "path"
 import os from "os"
 import { Config } from "../config/config"
 import { Instance } from "../project/instance"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { ConfigMarkdown } from "../config/markdown"
 import { Log } from "../util/log"
 import { Global } from "@/global"
@@ -14,7 +14,7 @@ import { Session } from "@/session"
 import { Discovery } from "./discovery"
 import { Glob } from "../util/glob"
 
-import { KilocodePaths } from "../kilocode/paths" // kilocode_change
+import { KilocodePaths } from "../ggai/paths" // ggai_change
 
 export namespace Skill {
   const log = Log.create({ service: "skill" })
@@ -48,7 +48,7 @@ export namespace Skill {
   // These follow the directory layout used by Claude Code and other agents.
   const EXTERNAL_DIRS = [".claude", ".agents"]
   const EXTERNAL_SKILL_PATTERN = "skills/**/SKILL.md"
-  const KILO_SKILL_PATTERN = "{skill,skills}/**/SKILL.md"
+  const GGAI_SKILL_PATTERN = "{skill,skills}/**/SKILL.md"
   const SKILL_PATTERN = "**/SKILL.md"
 
   export const state = Instance.state(async () => {
@@ -105,7 +105,7 @@ export namespace Skill {
 
     // Scan external skill directories (.claude/skills/, .agents/skills/, etc.)
     // Load global (home) first, then project-level (so project-level overwrites)
-    if (!Flag.KILO_DISABLE_EXTERNAL_SKILLS) {
+    if (!Flag.GGAI_DISABLE_EXTERNAL_SKILLS) {
       for (const dir of EXTERNAL_DIRS) {
         const root = path.join(Global.Path.home, dir)
         if (!(await Filesystem.isDir(root))) continue
@@ -121,7 +121,7 @@ export namespace Skill {
       }
     }
 
-    // kilocode_change start - Scan Kilocode skill directories
+    // ggai_change start - Scan Kilocode skill directories
     // Scanned before OpenCode so that OpenCode skills take precedence (last one wins)
     const kilocodeSkillDirs = await KilocodePaths.skillDirectories({
       projectDir: Instance.directory,
@@ -129,7 +129,7 @@ export namespace Skill {
     })
     for (const dir of kilocodeSkillDirs) {
       const matches = await Array.fromAsync(
-        await Glob.scan(KILO_SKILL_PATTERN, {
+        await Glob.scan(GGAI_SKILL_PATTERN, {
           cwd: dir,
           absolute: true,
           include: "file",
@@ -144,11 +144,11 @@ export namespace Skill {
         await addSkill(match)
       }
     }
-    // kilocode_change end
+    // ggai_change end
 
     // Scan .opencode/skill/ directories
     for (const dir of await Config.directories()) {
-      const matches = await Glob.scan(KILO_SKILL_PATTERN, {
+      const matches = await Glob.scan(GGAI_SKILL_PATTERN, {
         cwd: dir,
         absolute: true,
         include: "file",

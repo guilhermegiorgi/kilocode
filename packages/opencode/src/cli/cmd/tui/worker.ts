@@ -7,7 +7,7 @@ import { Rpc } from "@/util/rpc"
 import { upgrade } from "@/cli/upgrade"
 import { Config } from "@/config/config"
 import { GlobalBus } from "@/bus/global"
-import { createKiloClient, type Event } from "@kilocode/sdk/v2"
+import { createKiloClient, type Event } from "@ggai/sdk/v2"
 import type { BunWebSocketData } from "hono/bun"
 import { Flag } from "@/flag/flag"
 
@@ -154,8 +154,8 @@ export const rpc = {
 Rpc.listen(rpc)
 
 function getAuthorizationHeader(): string | undefined {
-  const password = Flag.KILO_SERVER_PASSWORD
+  const password = Flag.GGAI_SERVER_PASSWORD
   if (!password) return undefined
-  const username = Flag.KILO_SERVER_USERNAME ?? "kilo" // kilocode_change
+  const username = Flag.GGAI_SERVER_USERNAME ?? "kilo" // ggai_change
   return `Basic ${btoa(`${username}:${password}`)}`
 }

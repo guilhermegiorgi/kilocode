@@ -5,17 +5,17 @@ import z from "zod"
 import { Installation } from "../installation"
 import { Flag } from "../flag/flag"
 import { lazy } from "@/util/lazy"
-import { Config } from "../config/config" // kilocode_change
-import { ModelCache } from "./model-cache" // kilocode_change
-import { Auth } from "../auth" // kilocode_change
-import { KILO_OPENROUTER_BASE } from "@kilocode/kilo-gateway" // kilocode_change
+import { Config } from "../config/config" // ggai_change
+import { ModelCache } from "./model-cache" // ggai_change
+import { Auth } from "../auth" // ggai_change
+import { GGAI_OPENROUTER_BASE } from "@ggai/gateway" // ggai_change
 import { Filesystem } from "../util/filesystem"
 
 // Try to import bundled snapshot (generated at build time)
 // Falls back to undefined in dev mode when snapshot doesn't exist
 /* @ts-ignore */
 
-// kilocode_change start
+// ggai_change start
 const normalizeKiloBaseURL = (baseURL: string | undefined, orgId: string | undefined): string | undefined => {
   if (!baseURL) return undefined
   const trimmed = baseURL.replace(/\/+$/, "")
@@ -30,7 +30,7 @@ const normalizeKiloBaseURL = (baseURL: string | undefined, orgId: string | undef
 }
 
 export const Prompt = z.enum(["codex", "gemini", "beast", "anthropic", "trinity", "anthropic_without_todo"])
-// kilocode_change end
+// ggai_change end
 
 export namespace ModelsDev {
   const log = Log.create({ service: "models.dev" })
@@ -83,10 +83,10 @@ export namespace ModelsDev {
       })
       .optional(),
 
-    // kilocode_change start
+    // ggai_change start
     recommendedIndex: z.number().optional(),
     prompt: Prompt.optional().catch(undefined),
-    // kilocode_change end
+    // ggai_change end
 
     experimental: z.boolean().optional(),
     status: z.enum(["alpha", "beta", "deprecated"]).optional(),
@@ -109,66 +109,73 @@ export namespace ModelsDev {
   export type Provider = z.infer<typeof Provider>
 
   function url() {
-    return Flag.KILO_MODELS_URL || "https://models.dev"
+    return Flag.GGAI_MODELS_URL || "https://models.dev"
   }
 
   export const Data = lazy(async () => {
-    const result = await Filesystem.readJson(Flag.KILO_MODELS_PATH ?? filepath).catch(() => {})
+    const result = await Filesystem.readJson(Flag.GGAI_MODELS_PATH ?? filepath).catch(() => { })
     if (result) return result
     // @ts-ignore
     const snapshot = await import("./models-snapshot")
       .then((m) => m.snapshot as Record<string, unknown>)
       .catch(() => undefined)
     if (snapshot) return snapshot
-    if (Flag.KILO_DISABLE_MODELS_FETCH) return {}
+    if (Flag.GGAI_DISABLE_MODELS_FETCH) return {}
     const json = await fetch(`${url()}/api.json`).then((x) => x.text())
     return JSON.parse(json)
   })
 
   export async function get() {
     const result = await Data()
-    // kilocode_change start
+    // ggai_change start
     const providers = result as Record<string, Provider>
 
-    if (providers["kilo"]) {
-      delete providers["kilo"]
-    }
+    const gateways = [
+      { id: "kilo", name: "Kilo Gateway", env: "KILO_API_KEY", url: "https://api.kilo.ai" },
+      { id: "opencode", name: "Opencode Zen", env: "OPENCODE_API_KEY", url: "https://api.opencode.ai" },
+      { id: "ggai", name: "GG.AI Gateway", env: "GGAI_API_KEY", url: "https://api.gg.ai" }
+    ];
 
-    // Inject kilo provider with dynamic model fetching
-    if (!providers["kilo"]) {
+    for (const gw of gateways) {
+      if (providers[gw.id]) delete providers[gw.id];
+
       const config = await Config.get()
-      const kiloOptions = config.provider?.kilo?.options
-      // kilocode_change start - resolve org ID from auth (OAuth accountId) not just config
-      const kiloAuth = await Auth.get("kilo")
-      const kiloOrgId =
-        kiloOptions?.kilocodeOrganizationId ?? (kiloAuth?.type === "oauth" ? kiloAuth.accountId : undefined)
-      // kilocode_change end
-      const normalizedBaseURL = normalizeKiloBaseURL(kiloOptions?.baseURL, kiloOrgId)
-      const kiloFetchOptions = {
-        ...(normalizedBaseURL ? { baseURL: normalizedBaseURL } : {}),
-        ...(kiloOrgId ? { kilocodeOrganizationId: kiloOrgId } : {}),
+      const options = config.provider?.[gw.id]?.options
+      const auth = await Auth.get(gw.id)
+      const orgId =
+        options?.kilocodeOrganizationId ?? (auth?.type === "oauth" ? auth.accountId : undefined)
+
+      const normalizedBaseURL = normalizeKiloBaseURL(options?.baseURL, orgId)
+      const fetchOptions: any = {
+        ...(orgId ? { kilocodeOrganizationId: orgId } : {}),
       }
-      const defaultBaseURL = kiloOrgId
-        ? `https://api.kilo.ai/api/organizations/${kiloOrgId}`
-        : "https://api.kilo.ai/api/openrouter"
+
+      const defaultBaseURL = orgId
+        ? `${gw.url}/api/organizations/${orgId}`
+        : `${gw.url}/api/openrouter`
+
       const providerBaseURL = normalizedBaseURL ?? defaultBaseURL
+      fetchOptions.baseURL = providerBaseURL
+
       const ensureTrailingSlash = (value: string): string => (value.endsWith("/") ? value : `${value}/`)
-      const kiloModels = await ModelCache.fetch("kilo", kiloFetchOptions).catch(() => ({}))
-      providers["kilo"] = {
-        id: "kilo",
-        name: "Kilo Gateway",
-        env: ["KILO_API_KEY"],
-        api: ensureTrailingSlash(KILO_OPENROUTER_BASE),
-        npm: "@kilocode/kilo-gateway",
-        models: kiloModels,
+      const fetchedModels = await ModelCache.fetch(gw.id, fetchOptions).catch(() => ({}))
+
+      providers[gw.id] = {
+        id: gw.id,
+        name: gw.name,
+        env: [gw.env],
+        api: ensureTrailingSlash(providerBaseURL),
+        npm: "@ggai/gateway",
+        models: fetchedModels,
       }
-      if (Object.keys(kiloModels).length === 0) {
-        ModelCache.refresh("kilo", kiloFetchOptions).catch(() => {})
+
+      if (Object.keys(fetchedModels).length === 0) {
+        ModelCache.refresh(gw.id, fetchOptions).catch(() => { })
       }
     }
 
     return providers
-    // kilocode_change end
+    // ggai_change end
   }
 
   export async function refresh() {
@@ -189,7 +196,7 @@ export namespace ModelsDev {
   }
 }
 
-if (!Flag.KILO_DISABLE_MODELS_FETCH && !process.argv.includes("--get-yargs-completions")) {
+if (!Flag.GGAI_DISABLE_MODELS_FETCH && !process.argv.includes("--get-yargs-completions")) {
   ModelsDev.refresh()
   setInterval(
     async () => {

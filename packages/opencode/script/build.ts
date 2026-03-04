@@ -13,8 +13,8 @@ const dir = path.resolve(__dirname, "..")
 process.chdir(dir)
 
 import pkg from "../package.json"
-import { Script } from "@opencode-ai/script"
-const modelsUrl = process.env.KILO_MODELS_URL || "https://models.dev" // kilocode_change
+import { Script } from "@ggai/script"
+const modelsUrl = process.env.GGAI_MODELS_URL || "https://models.dev" // ggai_change
 // Fetch and generate models.dev snapshot
 const modelsData = process.env.MODELS_DEV_API_JSON
   ? await Bun.file(process.env.MODELS_DEV_API_JSON).text()
@@ -173,22 +173,22 @@ for (const item of targets) {
       autoloadTsconfig: true,
       autoloadPackageJson: true,
       target: name.replace(pkg.name, "bun") as any,
-      outfile: `dist/${name}/bin/kilo`,
+      outfile: `dist/${name}/bin/ggai`,
       execArgv: [`--user-agent=kilo/${Script.version}`, "--use-system-ca", "--"],
       windows: {},
     },
     entrypoints: ["./src/index.ts", parserWorker, workerPath],
     define: {
-      KILO_VERSION: `'${Script.version}'`, // kilocode_change
+      GGAI_VERSION: `'${Script.version}'`, // ggai_change
       OTUI_TREE_SITTER_WORKER_PATH: bunfsRoot + workerRelativePath,
-      KILO_WORKER_PATH: workerPath,
-      KILO_CHANNEL: `'${Script.channel}'`, // kilocode_change
-      KILO_LIBC: item.os === "linux" ? `'${item.abi ?? "glibc"}'` : "",
-      KILO_MIGRATIONS: JSON.stringify(migrationEntries),
+      GGAI_WORKER_PATH: workerPath,
+      GGAI_CHANNEL: `'${Script.channel}'`, // ggai_change
+      GGAI_LIBC: item.os === "linux" ? `'${item.abi ?? "glibc"}'` : "",
+      GGAI_MIGRATIONS: JSON.stringify(migrationEntries),
     },
   })
 
-  // kilocode_change start - fix Nix-specific ELF interpreter paths for Linux binaries
+  // ggai_change start - fix Nix-specific ELF interpreter paths for Linux binaries
   if (item.os === "linux") {
     const interpreters: Record<string, string> = {
       x64: "/lib64/ld-linux-x86-64.so.2",
@@ -200,14 +200,14 @@ for (const item of targets) {
     const interpreter = interpreters[key]
     if (interpreter) {
       try {
-        await $`patchelf --set-interpreter ${interpreter} dist/${name}/bin/kilo`
+        await $`patchelf --set-interpreter ${interpreter} dist/${name}/bin/ggai`
         console.log(`patched interpreter for ${name} -> ${interpreter}`)
       } catch {
         console.warn(`patchelf not available, skipping interpreter fix for ${name}`)
       }
     }
   }
-  // kilocode_change end
+  // ggai_change end
 
   await $`rm -rf ./dist/${name}/bin/tui`
   await Bun.file(`dist/${name}/package.json`).write(
@@ -219,7 +219,7 @@ for (const item of targets) {
         cpu: [item.arch],
         repository: {
           type: "git",
-          url: "https://github.com/Kilo-Org/kilocode",
+          url: "https://github.com/genesisgrid/kilocode",
         },
       },
       null,
@@ -230,20 +230,20 @@ for (const item of targets) {
 }
 
 if (Script.release) {
-  const archives: string[] = [] // kilocode_change
+  const archives: string[] = [] // ggai_change
   for (const key of Object.keys(binaries)) {
-    const archive = key.replace(pkg.name, "kilo") // kilocode_change
+    const archive = key.replace(pkg.name, "kilo") // ggai_change
     if (key.includes("linux")) {
-      const out = path.resolve("dist", `${archive}.tar.gz`) // kilocode_change
-      await $`tar -czf ${out} *`.cwd(`dist/${key}/bin`) // kilocode_change
-      archives.push(out) // kilocode_change
+      const out = path.resolve("dist", `${archive}.tar.gz`) // ggai_change
+      await $`tar -czf ${out} *`.cwd(`dist/${key}/bin`) // ggai_change
+      archives.push(out) // ggai_change
     } else {
-      const out = path.resolve("dist", `${archive}.zip`) // kilocode_change
-      await $`zip -r ${out} *`.cwd(`dist/${key}/bin`) // kilocode_change
-      archives.push(out) // kilocode_change
+      const out = path.resolve("dist", `${archive}.zip`) // ggai_change
+      await $`zip -r ${out} *`.cwd(`dist/${key}/bin`) // ggai_change
+      archives.push(out) // ggai_change
     }
   }
-  await $`gh release upload v${Script.version} ${archives} --clobber` // kilocode_change
+  await $`gh release upload v${Script.version} ${archives} --clobber` // ggai_change
 }
 
 export { binaries }

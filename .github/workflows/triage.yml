@@ -24,8 +24,8 @@ jobs:
 
       - name: Triage issue
         env:
-          KILO_API_KEY: ${{ secrets.KILO_API_KEY }}
-          KILO_ORG_ID: ${{ secrets.KILO_ORG_ID }}
+          GGAI_API_KEY: ${{ secrets.GGAI_API_KEY }}
+          GGAI_ORG_ID: ${{ secrets.GGAI_ORG_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}

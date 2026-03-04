@@ -42,18 +42,18 @@ beforeAll(async () => {
     useParams: () => ({}),
   }))
 
-  mock.module("@kilocode/sdk/v2/client", () => ({
+  mock.module("@ggai/sdk/v2/client", () => ({
     createKiloClient: (input: { directory: string }) => {
       createdClients.push(input.directory)
       return clientFor(input.directory)
     },
   }))
 
-  mock.module("@opencode-ai/ui/toast", () => ({
+  mock.module("@ggai/ui-core/toast", () => ({
     showToast: () => 0,
   }))
 
-  mock.module("@opencode-ai/util/encode", () => ({
+  mock.module("@ggai/util/encode", () => ({
     base64Encode: (value: string) => value,
   }))
 

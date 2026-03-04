@@ -1,13 +1,13 @@
 import "@/index.css"
-import { Code } from "@opencode-ai/ui/code"
-import { I18nProvider } from "@opencode-ai/ui/context"
-import { CodeComponentProvider } from "@opencode-ai/ui/context/code"
-import { DialogProvider } from "@opencode-ai/ui/context/dialog"
-import { DiffComponentProvider } from "@opencode-ai/ui/context/diff"
-import { MarkedProvider } from "@opencode-ai/ui/context/marked"
-import { Diff } from "@opencode-ai/ui/diff"
-import { Font } from "@opencode-ai/ui/font"
-import { ThemeProvider } from "@opencode-ai/ui/theme"
+import { Code } from "@ggai/ui-core/code"
+import { I18nProvider } from "@ggai/ui-core/context"
+import { CodeComponentProvider } from "@ggai/ui-core/context/code"
+import { DialogProvider } from "@ggai/ui-core/context/dialog"
+import { DiffComponentProvider } from "@ggai/ui-core/context/diff"
+import { MarkedProvider } from "@ggai/ui-core/context/marked"
+import { Diff } from "@ggai/ui-core/diff"
+import { Font } from "@ggai/ui-core/font"
+import { ThemeProvider } from "@ggai/ui-core/theme"
 import { MetaProvider } from "@solidjs/meta"
 import { Navigate, Route, Router } from "@solidjs/router"
 import { ErrorBoundary, type JSX, lazy, type ParentProps, Show, Suspense } from "solid-js"
@@ -58,7 +58,7 @@ function UiI18nBridge(props: ParentProps) {
 
 declare global {
   interface Window {
-    __KILO__?: {
+    __GGAI__?: {
       updaterEnabled?: boolean
       deepLinks?: string[]
       wsl?: boolean

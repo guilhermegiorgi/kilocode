@@ -9,9 +9,9 @@ import { BunProc } from "../bun"
 import { Plugin } from "../plugin"
 import {
   ModelsDev,
-  Prompt, // kilocode_change
+  Prompt, // ggai_change
 } from "./models"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { Auth } from "../auth"
 import { Env } from "../env"
 import { Instance } from "../project/instance"
@@ -32,7 +32,7 @@ import { createOpenAI } from "@ai-sdk/openai"
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible"
 import { createOpenRouter, type LanguageModelV2 } from "@openrouter/ai-sdk-provider"
 import { createOpenaiCompatible as createGitHubCopilotOpenAICompatible } from "./sdk/copilot"
-import { createKilo } from "@kilocode/kilo-gateway" // kilocode_change
+import { createKilo } from "@ggai/gateway" // ggai_change
 import { createXai } from "@ai-sdk/xai"
 import { createMistral } from "@ai-sdk/mistral"
 import { createGroq } from "@ai-sdk/groq"
@@ -49,7 +49,7 @@ import { GoogleAuth } from "google-auth-library"
 import { ProviderTransform } from "./transform"
 import { Installation } from "../installation"
 
-import { DEFAULT_HEADERS } from "@/kilocode/const" // kilocode_change
+import { DEFAULT_HEADERS } from "@/ggai/const" // ggai_change
 
 export namespace Provider {
   const log = Log.create({ service: "provider" })
@@ -100,7 +100,7 @@ export namespace Provider {
     "@ai-sdk/openai": createOpenAI,
     "@ai-sdk/openai-compatible": createOpenAICompatible,
     "@openrouter/ai-sdk-provider": createOpenRouter,
-    "@kilocode/kilo-gateway": createKilo, // kilocode_change
+    "@ggai/gateway": createKilo, // ggai_change
     "@ai-sdk/xai": createXai,
     "@ai-sdk/mistral": createMistral,
     "@ai-sdk/groq": createGroq,
@@ -123,13 +123,47 @@ export namespace Provider {
     options?: Record<string, any>
   }>
 
+  const gatewayHandler = async (input: any) => {
+    const env = Env.all()
+    const hasKey = await (async () => {
+      if (input.env.some((item: any) => env[item])) return true
+      if (await Auth.get(input.id)) return true
+      const config = await Config.get()
+      if (config.provider?.[input.id]?.options?.apiKey) return true
+      return false
+    })()
+
+    if (!hasKey) {
+      for (const [key, value] of Object.entries(input.models as Record<string, any>)) {
+        if (value.cost.input === 0) continue
+        delete input.models[key]
+      }
+    }
+
+    const options: Record<string, string> = {}
+
+    const envOrgKey = input.id === "ggai" ? "GGAI_ORG_ID" : input.id === "kilo" ? "KILO_ORG_ID" : "OPENCODE_ORG_ID"
+    if (env[envOrgKey]) {
+      options.kilocodeOrganizationId = env[envOrgKey]
+    }
+
+    if (!hasKey) {
+      options.apiKey = "anonymous"
+    }
+
+    return {
+      autoload: Object.keys(input.models).length > 0,
+      options,
+    }
+  }
+
   const CUSTOM_LOADERS: Record<string, CustomLoader> = {
     async anthropic() {
       return {
         autoload: false,
         options: {
           headers: {
-            // kilocode_change
+            // ggai_change
             // TODO: Add adaptive thinking headers when @ai-sdk/anthropic supports it:
             // adaptive-thinking-2026-01-28,effort-2025-11-24,max-effort-2026-01-24
             "anthropic-beta":
@@ -348,7 +382,7 @@ export namespace Provider {
       return {
         autoload: false,
         options: {
-          headers: DEFAULT_HEADERS, // kilocode_change
+          headers: DEFAULT_HEADERS, // ggai_change
         },
       }
     },
@@ -356,7 +390,7 @@ export namespace Provider {
       return {
         autoload: false,
         options: {
-          headers: DEFAULT_HEADERS, // kilocode_change
+          headers: DEFAULT_HEADERS, // ggai_change
         },
       }
     },
@@ -439,20 +473,11 @@ export namespace Provider {
       return {
         autoload: false,
         options: {
-          headers: DEFAULT_HEADERS, // kilocode_change
+          headers: DEFAULT_HEADERS, // ggai_change
         },
       }
     },
-    // kilocode_change start - prevent opencode zen from auto-connecting without credentials
-    opencode: async () => {
-      return {
-        autoload: false,
-        options: {
-          headers: DEFAULT_HEADERS,
-        },
-      }
-    },
-    // kilocode_change end
+    // Removed opencode (merged into gatewayHandler)
     gitlab: async (input) => {
       const instanceUrl = Env.get("GITLAB_INSTANCE_URL") || "https://gitlab.com"
 
@@ -467,7 +492,7 @@ export namespace Provider {
       const providerConfig = config.provider?.["gitlab"]
 
       const aiGatewayHeaders = {
-        "User-Agent": `kilo/${Installation.VERSION} gitlab-ai-provider/${GITLAB_PROVIDER_VERSION} (${os.platform()} ${os.release()}; ${os.arch()})`, // kilocode_change
+        "User-Agent": `kilo/${Installation.VERSION} gitlab-ai-provider/${GITLAB_PROVIDER_VERSION} (${os.platform()} ${os.release()}; ${os.arch()})`, // ggai_change
         ...(providerConfig?.options?.aiGatewayHeaders || {}),
       }
 
@@ -536,7 +561,7 @@ export namespace Provider {
       if (!apiToken) {
         throw new Error(
           "CLOUDFLARE_API_TOKEN (or CF_AIG_TOKEN) is required for Cloudflare AI Gateway. " +
-            "Set it via environment variable or run `opencode auth cloudflare-ai-gateway`.",
+          "Set it via environment variable or run `opencode auth cloudflare-ai-gateway`.",
         )
       }
 
@@ -566,39 +591,9 @@ export namespace Provider {
         },
       }
     },
-    // kilocode_change start
-    kilo: async (input) => {
-      const env = Env.all()
-      const hasKey = await (async () => {
-        if (input.env.some((item) => env[item])) return true
-        if (await Auth.get(input.id)) return true
-        const config = await Config.get()
-        if (config.provider?.["kilo"]?.options?.apiKey) return true
-        return false
-      })()
-
-      if (!hasKey) {
-        for (const [key, value] of Object.entries(input.models)) {
-          if (value.cost.input === 0) continue
-          delete input.models[key]
-        }
-      }
-
-      // Build options from KILO_* env vars
-      const options: Record<string, string> = {}
-      if (env.KILO_ORG_ID) {
-        options.kilocodeOrganizationId = env.KILO_ORG_ID
-      }
-      if (!hasKey) {
-        options.apiKey = "anonymous"
-      }
-
-      return {
-        autoload: Object.keys(input.models).length > 0,
-        options,
-      }
-    },
-    // kilocode_change end
+    kilo: gatewayHandler,
+    opencode: gatewayHandler,
+    ggai: gatewayHandler,
   }
 
   export const Model = z
@@ -667,10 +662,10 @@ export namespace Provider {
       release_date: z.string(),
       variants: z.record(z.string(), z.record(z.string(), z.any())).optional(),
 
-      // kilocode_change start
+      // ggai_change start
       recommendedIndex: z.number().optional(),
       prompt: Prompt.optional().catch(undefined),
-      // kilocode_change end
+      // ggai_change end
     })
     .meta({
       ref: "Model",
@@ -715,13 +710,13 @@ export namespace Provider {
         },
         experimentalOver200K: model.cost?.context_over_200k
           ? {
-              cache: {
-                read: model.cost.context_over_200k.cache_read ?? 0,
-                write: model.cost.context_over_200k.cache_write ?? 0,
-              },
-              input: model.cost.context_over_200k.input,
-              output: model.cost.context_over_200k.output,
-            }
+            cache: {
+              read: model.cost.context_over_200k.cache_read ?? 0,
+              write: model.cost.context_over_200k.cache_write ?? 0,
+            },
+            input: model.cost.context_over_200k.input,
+            output: model.cost.context_over_200k.output,
+          }
           : undefined,
       },
       limit: {
@@ -752,11 +747,11 @@ export namespace Provider {
       },
       release_date: model.release_date,
 
-      // kilocode_change start
+      // ggai_change start
       variants: provider.id === "kilo" ? (model.variants ?? {}) : {},
       recommendedIndex: model.recommendedIndex,
       prompt: model.prompt,
-      // kilocode_change end
+      // ggai_change end
     }
 
     m.variants = mapValues(ProviderTransform.variants(m), (v) => v)
@@ -901,10 +896,10 @@ export namespace Provider {
           release_date: model.release_date ?? existingModel?.release_date ?? "",
           variants: {},
 
-          // kilocode_change start
+          // ggai_change start
           recommendedIndex: model.recommendedIndex ?? existingModel?.recommendedIndex,
           prompt: model.prompt ?? existingModel?.prompt,
-          // kilocode_change end
+          // ggai_change end
         }
         const merged = mergeDeep(ProviderTransform.variants(parsedModel), model.variants ?? {})
         parsedModel.variants = mapValues(
@@ -1023,7 +1018,7 @@ export namespace Provider {
         model.api.id = model.api.id ?? model.id ?? modelID
         if (modelID === "gpt-5-chat-latest" || (providerID === "openrouter" && modelID === "openai/gpt-5-chat"))
           delete provider.models[modelID]
-        if (model.status === "alpha" && !Flag.KILO_ENABLE_EXPERIMENTAL_MODELS) delete provider.models[modelID]
+        if (model.status === "alpha" && !Flag.GGAI_ENABLE_EXPERIMENTAL_MODELS) delete provider.models[modelID]
         if (model.status === "deprecated") delete provider.models[modelID]
         if (
           (configProvider?.blacklist && configProvider.blacklist.includes(modelID)) ||
@@ -1254,11 +1249,11 @@ export namespace Provider {
         "gemini-2.5-flash",
         "gpt-5-nano",
       ]
-      // kilocode_change start
+      // ggai_change start
       if (providerID.startsWith("kilo")) {
         priority = ["gpt-5-nano"]
       }
-      // kilocode_change end
+      // ggai_change end
       if (providerID.startsWith("github-copilot")) {
         // prioritize free models for github copilot
         priority = ["gpt-5-mini", "claude-haiku-4.5", ...priority]
@@ -1294,13 +1289,13 @@ export namespace Provider {
       }
     }
 
-    // kilocode_change start
+    // ggai_change start
     // Check if kilo provider is available before using it
     const kiloProvider = await state().then((state) => state.providers["kilo"])
     if (kiloProvider && kiloProvider.models["gpt-5-nano"]) {
       return getModel("kilo", "gpt-5-nano")
     }
-    // kilocode_change end
+    // ggai_change end
 
     return undefined
   }

@@ -40,8 +40,8 @@ import { ArgsProvider, useArgs, type Args } from "./context/args"
 import open from "open"
 import { writeHeapSnapshot } from "v8"
 import { PromptRefProvider, usePromptRef } from "./context/prompt"
-import { registerKiloCommands } from "@/kilocode/kilo-commands" // kilocode_change
-import { initializeTUIDependencies } from "@kilocode/kilo-gateway/tui" // kilocode_change
+import { registerKiloCommands } from "@/ggai/kilo-commands" // ggai_change
+import { initializeTUIDependencies } from "@ggai/gateway/tui" // ggai_change
 import { TuiConfigProvider } from "./context/tui-config"
 import { TuiConfig } from "@/config/tui"
 
@@ -221,7 +221,7 @@ function App() {
   const promptRef = usePromptRef()
 
   useKeyboard((evt) => {
-    if (!Flag.KILO_EXPERIMENTAL_DISABLE_COPY_ON_SELECT) return
+    if (!Flag.GGAI_EXPERIMENTAL_DISABLE_COPY_ON_SELECT) return
     if (!renderer.getSelection()) return
 
     // Windows Terminal-like behavior:
@@ -267,25 +267,25 @@ function App() {
 
   // Update terminal window title based on current route and session
   createEffect(() => {
-    if (!terminalTitleEnabled() || Flag.KILO_DISABLE_TERMINAL_TITLE) return
+    if (!terminalTitleEnabled() || Flag.GGAI_DISABLE_TERMINAL_TITLE) return
 
-    const titleDefault = "Kilo CLI" // kilocode_change
+    const titleDefault = "Kilo CLI" // ggai_change
 
     if (route.data.type === "home") {
-      renderer.setTerminalTitle(titleDefault) // kilocode_change
+      renderer.setTerminalTitle(titleDefault) // ggai_change
       return
     }
 
     if (route.data.type === "session") {
       const session = sync.session.get(route.data.sessionID)
       if (!session || SessionApi.isDefaultTitle(session.title)) {
-        renderer.setTerminalTitle(titleDefault) // kilocode_change
+        renderer.setTerminalTitle(titleDefault) // ggai_change
         return
       }
 
       // Truncate title to 40 chars max
       const title = session.title.length > 40 ? session.title.slice(0, 37) + "..." : session.title
-      renderer.setTerminalTitle(`${titleDefault} | ${title}`) // kilocode_change
+      renderer.setTerminalTitle(`${titleDefault} | ${title}`) // ggai_change
     }
   })
 
@@ -566,7 +566,7 @@ function App() {
       title: "Open docs",
       value: "docs.open",
       onSelect: () => {
-        open("https://kilo.ai/docs").catch(() => {}) // kilocode_change
+        open("https://gg.ai/docs").catch(() => {}) // ggai_change
         dialog.clear()
       },
       category: "System",
@@ -665,7 +665,7 @@ function App() {
     },
   ])
 
-  // kilocode_change start - Initialize TUI dependencies for kilo-gateway
+  // ggai_change start - Initialize TUI dependencies for kilo-gateway
   initializeTUIDependencies({
     useCommandDialog: useCommandDialog,
     useSync: useSync,
@@ -681,9 +681,9 @@ function App() {
     TextAttributes: TextAttributes,
   })
   registerKiloCommands(useSDK)
-  // kilocode_change end
+  // ggai_change end
 
-  // kilocode_change - Delete OpenRouter Alert
+  // ggai_change - Delete OpenRouter Alert
   sdk.event.on(TuiEvent.CommandExecute.type, (evt) => {
     command.trigger(evt.properties.command)
   })
@@ -740,7 +740,7 @@ function App() {
     toast.show({
       variant: "info",
       title: "Update Available",
-      message: `Kilo v${evt.properties.version} is available. Run 'kilo upgrade' to update manually.`, // kilocode_change
+      message: `Kilo v${evt.properties.version} is available. Run 'kilo upgrade' to update manually.`, // ggai_change
       duration: 10000,
     })
   })
@@ -751,14 +751,14 @@ function App() {
       height={dimensions().height}
       backgroundColor={theme.background}
       onMouseDown={(evt) => {
-        if (!Flag.KILO_EXPERIMENTAL_DISABLE_COPY_ON_SELECT) return
+        if (!Flag.GGAI_EXPERIMENTAL_DISABLE_COPY_ON_SELECT) return
         if (evt.button !== MouseButton.RIGHT) return
 
         if (!Selection.copy(renderer, toast)) return
         evt.preventDefault()
         evt.stopPropagation()
       }}
-      onMouseUp={Flag.KILO_EXPERIMENTAL_DISABLE_COPY_ON_SELECT ? undefined : () => Selection.copy(renderer, toast)}
+      onMouseUp={Flag.GGAI_EXPERIMENTAL_DISABLE_COPY_ON_SELECT ? undefined : () => Selection.copy(renderer, toast)}
     >
       <Switch>
         <Match when={route.data.type === "home"}>
@@ -795,7 +795,7 @@ function ErrorComponent(props: {
   })
   const [copied, setCopied] = createSignal(false)
 
-  const issueURL = new URL("https://github.com/Kilo-Org/kilocode/issues/new?template=bug-report.yml")
+  const issueURL = new URL("https://github.com/genesisgrid/ggai/issues/new?template=bug-report.yml")
 
   // Choose safe fallback colors per mode since theme context may not be available
   const isLight = props.mode === "light"
@@ -817,7 +817,7 @@ function ErrorComponent(props: {
     )
   }
 
-  issueURL.searchParams.set("opencode-version", Installation.VERSION)
+  issueURL.searchParams.set("ggai-version", Installation.VERSION)
 
   const copyIssueURL = () => {
     Clipboard.copy(issueURL.toString()).then(() => {

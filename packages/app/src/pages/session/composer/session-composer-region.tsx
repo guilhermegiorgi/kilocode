@@ -18,7 +18,7 @@ export function SessionComposerRegion(props: {
   onSubmit: () => void
   onResponseSubmit: () => void
   setPromptDockRef: (el: HTMLDivElement) => void
-  onModeAction?: (input: { mode: string; text: string; description?: string }) => void // kilocode_change
+  onModeAction?: (input: { mode: string; text: string; description?: string }) => void // ggai_change
 }) {
   const params = useParams()
   const prompt = usePrompt()
@@ -59,7 +59,7 @@ export function SessionComposerRegion(props: {
         <Show when={props.state.questionRequest()} keyed>
           {(request) => (
             <div>
-              {/* kilocode_change: add onModeAction */}
+              {/* ggai_change: add onModeAction */}
               <SessionQuestionDock
                 request={request}
                 onSubmit={props.onResponseSubmit}

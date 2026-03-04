@@ -1,8 +1,8 @@
-// kilocode_change - new file
+// ggai_change - new file
 import { Hono } from "hono"
 import { describeRoute, validator, resolver } from "hono-openapi"
 import z from "zod"
-import { Telemetry } from "@kilocode/kilo-telemetry"
+import { Telemetry } from "@ggai/telemetry"
 import { lazy } from "../../util/lazy"
 import { errors } from "../error"
 

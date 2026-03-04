@@ -1,10 +1,10 @@
-import { Button } from "@opencode-ai/ui/button"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
-import { Dialog } from "@opencode-ai/ui/dialog"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
-import { TextField } from "@opencode-ai/ui/text-field"
-import { showToast } from "@opencode-ai/ui/toast"
+import { Button } from "@ggai/ui-core/button"
+import { useDialog } from "@ggai/ui-core/context/dialog"
+import { Dialog } from "@ggai/ui-core/dialog"
+import { IconButton } from "@ggai/ui-core/icon-button"
+import { ProviderIcon } from "@ggai/ui-core/provider-icon"
+import { TextField } from "@ggai/ui-core/text-field"
+import { showToast } from "@ggai/ui-core/toast"
 import { For } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Link } from "@/components/link"
@@ -292,7 +292,7 @@ export function DialogCustomProvider(props: Props) {
         <form onSubmit={save} class="px-2.5 pb-6 flex flex-col gap-6">
           <p class="text-14-regular text-text-base">
             {language.t("provider.custom.description.prefix")}
-            <Link href="https://kilo.ai/docs/providers/#custom-provider" tabIndex={-1}>
+            <Link href="https://gg.ai/docs/providers/#custom-provider" tabIndex={-1}>
               {language.t("provider.custom.description.link")}
             </Link>
             {language.t("provider.custom.description.suffix")}

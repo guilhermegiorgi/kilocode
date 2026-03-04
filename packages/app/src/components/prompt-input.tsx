@@ -1,4 +1,4 @@
-import { useFilteredList } from "@opencode-ai/ui/hooks"
+import { useFilteredList } from "@ggai/ui-core/hooks"
 import { createEffect, on, Component, Show, onCleanup, Switch, Match, createMemo, createSignal } from "solid-js"
 import { createStore } from "solid-js/store"
 import { createFocusSignal } from "@solid-primitives/active-element"
@@ -19,16 +19,16 @@ import { useSDK } from "@/context/sdk"
 import { useParams } from "@solidjs/router"
 import { useSync } from "@/context/sync"
 import { useComments } from "@/context/comments"
-import { Button } from "@opencode-ai/ui/button"
-import { DockShellForm, DockTray } from "@opencode-ai/ui/dock-surface"
-import { Icon } from "@opencode-ai/ui/icon"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
-import type { IconName } from "@opencode-ai/ui/icons/provider"
-import { Tooltip, TooltipKeybind } from "@opencode-ai/ui/tooltip"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import { Select } from "@opencode-ai/ui/select"
-import { RadioGroup } from "@opencode-ai/ui/radio-group"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { Button } from "@ggai/ui-core/button"
+import { DockShellForm, DockTray } from "@ggai/ui-core/dock-surface"
+import { Icon } from "@ggai/ui-core/icon"
+import { ProviderIcon } from "@ggai/ui-core/provider-icon"
+import type { IconName } from "@ggai/ui-core/icons/provider"
+import { Tooltip, TooltipKeybind } from "@ggai/ui-core/tooltip"
+import { IconButton } from "@ggai/ui-core/icon-button"
+import { Select } from "@ggai/ui-core/select"
+import { RadioGroup } from "@ggai/ui-core/radio-group"
+import { useDialog } from "@ggai/ui-core/context/dialog"
 import { ModelSelectorPopover } from "@/components/dialog-select-model"
 import { DialogSelectModelUnpaid } from "@/components/dialog-select-model-unpaid"
 import { useProviders } from "@/hooks/use-providers"
@@ -51,7 +51,7 @@ import { PromptContextItems } from "./prompt-input/context-items"
 import { PromptImageAttachments } from "./prompt-input/image-attachments"
 import { PromptDragOverlay } from "./prompt-input/drag-overlay"
 import { promptPlaceholder } from "./prompt-input/placeholder"
-import { ImagePreview } from "@opencode-ai/ui/image-preview"
+import { ImagePreview } from "@ggai/ui-core/image-preview"
 
 interface PromptInputProps {
   class?: string
@@ -1116,7 +1116,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
           }}
         >
           <div
-            data-slot="prompt-input-scroll" // kilocode_change
+            data-slot="prompt-input-scroll" // ggai_change
             class="relative max-h-[240px] overflow-y-auto no-scrollbar"
             ref={(el) => (scrollRef = el)}
           >
@@ -1272,7 +1272,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
         <DockTray attach="top">
           <div
             class="px-1.75 pt-5.5 pb-2 flex items-center gap-2 min-w-0"
-            data-slot="prompt-input-toolbar" // kilocode_change
+            data-slot="prompt-input-toolbar" // ggai_change
           >
             <div class="flex items-center gap-1.5 min-w-0 flex-1">
               <Show when={store.mode === "shell"}>

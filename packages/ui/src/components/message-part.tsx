@@ -25,7 +25,7 @@ import {
   Todo,
   QuestionAnswer,
   QuestionInfo,
-} from "@kilocode/sdk/v2"
+} from "@ggai/sdk/v2"
 import { useData } from "../context"
 import { useDiffComponent } from "../context/diff"
 import { useCodeComponent } from "../context/code"
@@ -43,8 +43,8 @@ import { Checkbox } from "./checkbox"
 import { DiffChanges } from "./diff-changes"
 import { Markdown } from "./markdown"
 import { ImagePreview } from "./image-preview"
-import { getDirectory as _getDirectory, getFilename } from "@opencode-ai/util/path"
-import { checksum } from "@opencode-ai/util/encode"
+import { getDirectory as _getDirectory, getFilename } from "@ggai/util/path"
+import { checksum } from "@ggai/util/encode"
 import { Tooltip } from "./tooltip"
 import { IconButton } from "./icon-button"
 import { TextShimmer } from "./text-shimmer"
@@ -1090,7 +1090,7 @@ PART_MAPPING["text"] = function TextPartDisplay(props) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  // kilocode_change start
+  // ggai_change start
   const handleMarkdownClick = (e: MouseEvent) => {
     if (!data.openFile) return
     const target = e.target
@@ -1105,16 +1105,16 @@ PART_MAPPING["text"] = function TextPartDisplay(props) {
     const column = colAttr ? parseInt(colAttr, 10) : undefined
     data.openFile(path, line, column)
   }
-  // kilocode_change end
+  // ggai_change end
 
   return (
     <Show when={throttledText()}>
       <div data-component="text-part">
         <div data-slot="text-part-body">
-          <Markdown text={throttledText()} cacheKey={part.id} onClick={handleMarkdownClick} /> {/* kilocode_change */}
+          <Markdown text={throttledText()} cacheKey={part.id} onClick={handleMarkdownClick} /> {/* ggai_change */}
         </div>
         <Show when={showCopy()}>
-          {/* kilocode_change: data-is-turn-copy makes the copy button always visible for the final response */}
+          {/* ggai_change: data-is-turn-copy makes the copy button always visible for the final response */}
           <div
             data-slot="text-part-copy-wrapper"
             data-interrupted={interrupted() ? "" : undefined}
@@ -1152,11 +1152,11 @@ PART_MAPPING["text"] = function TextPartDisplay(props) {
 
 PART_MAPPING["reasoning"] = function ReasoningPartDisplay(props) {
   const part = props.part as ReasoningPart
-  // kilocode_change start
+  // ggai_change start
   // Filter out redacted reasoning chunks from OpenRouter
   // OpenRouter sends encrypted reasoning data that appears as [REDACTED]
   const text = () => part.text.replace("[REDACTED]", "").trim()
-  // kilocode_change end
+  // ggai_change end
   const throttledText = createThrottledValue(text)
 
   return (
@@ -1192,18 +1192,18 @@ ToolRegistry.register({
             subtitle: props.input.filePath ? getFilename(props.input.filePath) : "",
             args,
           }}
-          // kilocode_change start
+          // ggai_change start
           onSubtitleClick={
             data.openFile && props.input.filePath ? () => data.openFile!(props.input.filePath) : undefined
           }
-          // kilocode_change end
+          // ggai_change end
         />
         <For each={loaded()}>
           {(filepath) => (
             <div
               data-component="tool-loaded-file"
-              classList={{ clickable: !!data.openFile }} // kilocode_change
-              onClick={() => data.openFile?.(filepath)} // kilocode_change
+              classList={{ clickable: !!data.openFile }} // ggai_change
+              onClick={() => data.openFile?.(filepath)} // ggai_change
             >
               <Icon name="enter" size="small" />
               <span>
@@ -1448,7 +1448,7 @@ ToolRegistry.register({
     return (
       <BasicTool
         {...props}
-        defaultOpen // kilocode_change
+        defaultOpen // ggai_change
         icon="console"
         trigger={{
           title: i18n.t("ui.tool.shell"),
@@ -1486,19 +1486,19 @@ ToolRegistry.register({
 ToolRegistry.register({
   name: "edit",
   render(props) {
-    const data = useData() // kilocode_change
+    const data = useData() // ggai_change
     const i18n = useI18n()
     const diffComponent = useDiffComponent()
     const diagnostics = createMemo(() => getDiagnostics(props.metadata.diagnostics, props.input.filePath))
     const path = createMemo(() => props.metadata?.filediff?.file || props.input.filePath || "")
     const filename = () => getFilename(props.input.filePath ?? "")
-    // kilocode_change start
+    // ggai_change start
     const handleFileClick = (e: MouseEvent) => {
       if (!data.openFile || !props.input.filePath) return
       e.stopPropagation()
       data.openFile(props.input.filePath)
     }
-    // kilocode_change end
+    // ggai_change end
 
     const pending = () => props.status === "pending" || props.status === "running"
     return (
@@ -1517,7 +1517,7 @@ ToolRegistry.register({
                     </Show>
                   </span>
                   <Show when={!pending()}>
-                    {/* kilocode_change start */}
+                    {/* ggai_change start */}
                     <span
                       data-slot="message-part-title-filename"
                       classList={{ clickable: !!data.openFile }}
@@ -1525,12 +1525,12 @@ ToolRegistry.register({
                     >
                       {filename()}
                     </span>
-                    {/* kilocode_change end */}
+                    {/* ggai_change end */}
                   </Show>
                 </div>
                 <Show when={!pending() && props.input.filePath?.includes("/")}>
                   <div data-slot="message-part-path">
-                    {/* kilocode_change start */}
+                    {/* ggai_change start */}
                     <span
                       data-slot="message-part-directory"
                       classList={{ clickable: !!data.openFile }}
@@ -1538,7 +1538,7 @@ ToolRegistry.register({
                     >
                       {getDirectory(props.input.filePath!)}
                     </span>
-                    {/* kilocode_change end */}
+                    {/* ggai_change end */}
                   </div>
                 </Show>
               </div>
@@ -1582,19 +1582,19 @@ ToolRegistry.register({
 ToolRegistry.register({
   name: "write",
   render(props) {
-    const data = useData() // kilocode_change
+    const data = useData() // ggai_change
     const i18n = useI18n()
     const codeComponent = useCodeComponent()
     const diagnostics = createMemo(() => getDiagnostics(props.metadata.diagnostics, props.input.filePath))
     const path = createMemo(() => props.input.filePath || "")
     const filename = () => getFilename(props.input.filePath ?? "")
-    // kilocode_change start
+    // ggai_change start
     const handleFileClick = (e: MouseEvent) => {
       if (!data.openFile || !props.input.filePath) return
       e.stopPropagation()
       data.openFile(props.input.filePath)
     }
-    // kilocode_change end
+    // ggai_change end
 
     const pending = () => props.status === "pending" || props.status === "running"
     return (
@@ -1613,7 +1613,7 @@ ToolRegistry.register({
                     </Show>
                   </span>
                   <Show when={!pending()}>
-                    {/* kilocode_change start */}
+                    {/* ggai_change start */}
                     <span
                       data-slot="message-part-title-filename"
                       classList={{ clickable: !!data.openFile }}
@@ -1621,12 +1621,12 @@ ToolRegistry.register({
                     >
                       {filename()}
                     </span>
-                    {/* kilocode_change end */}
+                    {/* ggai_change end */}
                   </Show>
                 </div>
                 <Show when={!pending() && props.input.filePath?.includes("/")}>
                   <div data-slot="message-part-path">
-                    {/* kilocode_change start */}
+                    {/* ggai_change start */}
                     <span
                       data-slot="message-part-directory"
                       classList={{ clickable: !!data.openFile }}
@@ -1634,7 +1634,7 @@ ToolRegistry.register({
                     >
                       {getDirectory(props.input.filePath!)}
                     </span>
-                    {/* kilocode_change end */}
+                    {/* ggai_change end */}
                   </div>
                 </Show>
               </div>
@@ -1679,7 +1679,7 @@ interface ApplyPatchFile {
 ToolRegistry.register({
   name: "apply_patch",
   render(props) {
-    const data = useData() // kilocode_change
+    const data = useData() // ggai_change
     const i18n = useI18n()
     const diffComponent = useDiffComponent()
     const files = createMemo(() => (props.metadata.files ?? []) as ApplyPatchFile[])
@@ -1776,7 +1776,7 @@ ToolRegistry.register({
                                         {i18n.t("ui.patch.action.moved")}
                                       </span>
                                     </Match>
-                                    {/* kilocode_change start */}
+                                    {/* ggai_change start */}
                                     <span
                                       data-slot="apply-patch-file-path"
                                       classList={{ clickable: !!data.openFile }}
@@ -1788,7 +1788,7 @@ ToolRegistry.register({
                                     >
                                       {file.relativePath}
                                     </span>
-                                    {/* kilocode_change end */}
+                                    {/* ggai_change end */}
                                     <Match when={true}>
                                       <DiffChanges changes={{ additions: file.additions, deletions: file.deletions }} />
                                     </Match>

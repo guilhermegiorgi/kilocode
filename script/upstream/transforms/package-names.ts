@@ -5,8 +5,8 @@
  * This script transforms:
  * - opencode-ai -> @kilocode/cli
  * - @opencode-ai/cli -> @kilocode/cli
- * - @opencode-ai/sdk -> @kilocode/sdk
- * - @opencode-ai/plugin -> @kilocode/plugin
+ * - @opencode-ai/sdk -> @ggai/sdk
+ * - @opencode-ai/plugin -> @ggai/plugin
  */
 
 import { Glob } from "bun"
@@ -32,27 +32,27 @@ const PACKAGE_PATTERNS = [
   // In dependencies/devDependencies
   { pattern: /"opencode-ai":\s*"/g, replacement: '"@kilocode/cli": "' },
   { pattern: /"@opencode-ai\/cli":\s*"/g, replacement: '"@kilocode/cli": "' },
-  { pattern: /"@opencode-ai\/sdk":\s*"/g, replacement: '"@kilocode/sdk": "' },
-  { pattern: /"@opencode-ai\/plugin":\s*"/g, replacement: '"@kilocode/plugin": "' },
+  { pattern: /"@opencode-ai\/sdk":\s*"/g, replacement: '"@ggai/sdk": "' },
+  { pattern: /"@opencode-ai\/plugin":\s*"/g, replacement: '"@ggai/plugin": "' },
 
   // In any string context (mock.module, dynamic references, etc.)
   // Only cli, sdk, and plugin are renamed — other @opencode-ai/* packages
-  // (e.g. @opencode-ai/ui, @opencode-ai/util) keep their upstream names.
+  // (e.g. @opencode-ai/ui, @ggai/util) keep their upstream names.
   { pattern: /@opencode-ai\/cli(?=\/|"|'|`|$)/g, replacement: "@kilocode/cli" },
-  { pattern: /@opencode-ai\/sdk(?=\/|"|'|`|$)/g, replacement: "@kilocode/sdk" },
-  { pattern: /@opencode-ai\/plugin(?=\/|"|'|`|$)/g, replacement: "@kilocode/plugin" },
+  { pattern: /@opencode-ai\/sdk(?=\/|"|'|`|$)/g, replacement: "@ggai/sdk" },
+  { pattern: /@opencode-ai\/plugin(?=\/|"|'|`|$)/g, replacement: "@ggai/plugin" },
 
   // In import statements (supports subpaths like @opencode-ai/sdk/v2)
   { pattern: /from\s+["']opencode-ai["']/g, replacement: 'from "@kilocode/cli"' },
   { pattern: /from\s+["']@opencode-ai\/cli(\/[^"']*)?["']/g, replacement: 'from "@kilocode/cli$1"' },
-  { pattern: /from\s+["']@opencode-ai\/sdk(\/[^"']*)?["']/g, replacement: 'from "@kilocode/sdk$1"' },
-  { pattern: /from\s+["']@opencode-ai\/plugin(\/[^"']*)?["']/g, replacement: 'from "@kilocode/plugin$1"' },
+  { pattern: /from\s+["']@opencode-ai\/sdk(\/[^"']*)?["']/g, replacement: 'from "@ggai/sdk$1"' },
+  { pattern: /from\s+["']@opencode-ai\/plugin(\/[^"']*)?["']/g, replacement: 'from "@ggai/plugin$1"' },
 
   // In require statements (supports subpaths like @opencode-ai/sdk/v2)
   { pattern: /require\(["']opencode-ai["']\)/g, replacement: 'require("@kilocode/cli")' },
   { pattern: /require\(["']@opencode-ai\/cli(\/[^"']*)?["']\)/g, replacement: 'require("@kilocode/cli$1")' },
-  { pattern: /require\(["']@opencode-ai\/sdk(\/[^"']*)?["']\)/g, replacement: 'require("@kilocode/sdk$1")' },
-  { pattern: /require\(["']@opencode-ai\/plugin(\/[^"']*)?["']\)/g, replacement: 'require("@kilocode/plugin$1")' },
+  { pattern: /require\(["']@opencode-ai\/sdk(\/[^"']*)?["']\)/g, replacement: 'require("@ggai/sdk$1")' },
+  { pattern: /require\(["']@opencode-ai\/plugin(\/[^"']*)?["']\)/g, replacement: 'require("@ggai/plugin$1")' },
 
   // Internal placeholder hostname used for in-process RPC (never resolved by DNS)
   { pattern: /opencode\.internal/g, replacement: "kilo.internal" },

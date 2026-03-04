@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// ggai_change - new file
 import { describe, expect, test } from "bun:test"
 import { $ } from "bun"
 import fs from "fs/promises"
@@ -12,8 +12,8 @@ describe("npm install artifact behavior", () => {
   test("keeps the CLI wrapper contract", async () => {
     const text = await fs.readFile(wrapper, "utf8")
     expect(text.startsWith("#!/usr/bin/env node")).toBe(true)
-    expect(text).toContain("const envPath = process.env.KILO_BIN_PATH")
-    expect(text).toContain("const base = \"@kilocode/cli-\" + platform + \"-\" + arch")
+    expect(text).toContain("const envPath = process.env.GGAI_BIN_PATH")
+    expect(text).toContain('const base = "@kilocode/cli-" + platform + "-" + arch')
     expect(text).toContain("function findBinary(startDir)")
   })
 
@@ -39,8 +39,7 @@ describe("npm install artifact behavior", () => {
             name: "kilo-install-artifact-repro",
             version: "1.0.0",
             bin: {
-              kilo: "./bin/kilo",
-              kilocode: "./bin/kilo",
+              ggai: "./bin/ggai",
             },
           },
           null,
@@ -50,7 +49,7 @@ describe("npm install artifact behavior", () => {
 
       await $`npm install --prefix ${prefix} ${pkg} --no-package-lock --ignore-scripts --no-audit --no-fund`.quiet()
 
-      const commands = ["kilo", "kilocode"]
+      const commands = ["ggai"]
       for (const name of commands) {
         const link = path.join(prefix, "node_modules", ".bin", name)
         const stat = await fs.lstat(link)

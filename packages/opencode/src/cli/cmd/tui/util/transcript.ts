@@ -1,4 +1,4 @@
-import type { AssistantMessage, Part, UserMessage } from "@kilocode/sdk/v2"
+import type { AssistantMessage, Part, UserMessage } from "@ggai/sdk/v2"
 import { Locale } from "@/util/locale"
 
 export type TranscriptOptions = {

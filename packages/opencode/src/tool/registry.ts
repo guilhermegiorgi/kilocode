@@ -17,7 +17,7 @@ import { Tool } from "./tool"
 import { Instance } from "../project/instance"
 import { Config } from "../config/config"
 import path from "path"
-import { type ToolContext as PluginToolContext, type ToolDefinition } from "@kilocode/plugin"
+import { type ToolContext as PluginToolContext, type ToolDefinition } from "@ggai/plugin"
 import z from "zod"
 import { Plugin } from "../plugin"
 import { WebSearchTool } from "./websearch"
@@ -98,11 +98,11 @@ export namespace ToolRegistry {
   async function all(): Promise<Tool.Info[]> {
     const custom = await state().then((x) => x.custom)
     const config = await Config.get()
-    const question = ["app", "cli", "desktop"].includes(Flag.KILO_CLIENT) || Flag.KILO_ENABLE_QUESTION_TOOL
+    const question = ["app", "cli", "desktop"].includes(Flag.GGAI_CLIENT) || Flag.GGAI_ENABLE_QUESTION_TOOL
 
     return [
       InvalidTool,
-      ...(["app", "cli", "desktop", "vscode"].includes(Flag.KILO_CLIENT) && question ? [QuestionTool] : []), // kilocode_change
+      ...(["app", "cli", "desktop", "vscode"].includes(Flag.GGAI_CLIENT) && question ? [QuestionTool] : []), // ggai_change
       BashTool,
       ReadTool,
       GlobTool,
@@ -117,9 +117,9 @@ export namespace ToolRegistry {
       CodeSearchTool,
       SkillTool,
       ApplyPatchTool,
-      ...(Flag.KILO_EXPERIMENTAL_LSP_TOOL ? [LspTool] : []),
+      ...(Flag.GGAI_EXPERIMENTAL_LSP_TOOL ? [LspTool] : []),
       ...(config.experimental?.batch_tool === true ? [BatchTool] : []),
-      ...(Flag.KILO_EXPERIMENTAL_PLAN_MODE && Flag.KILO_CLIENT === "cli" ? [PlanExitTool] : []),
+      ...(Flag.GGAI_EXPERIMENTAL_PLAN_MODE && Flag.GGAI_CLIENT === "cli" ? [PlanExitTool] : []),
       ...custom,
     ]
   }
@@ -140,11 +140,11 @@ export namespace ToolRegistry {
       tools
         .filter((t) => {
           // Enable websearch/codesearch for zen/kilo users OR via enable flag
-          // kilocode_change start
+          // ggai_change start
           if (t.id === "codesearch" || t.id === "websearch") {
-            return model.providerID === "opencode" || model.providerID === "kilo" || Flag.KILO_ENABLE_EXA
+            return model.providerID === "opencode" || model.providerID === "kilo" || Flag.GGAI_ENABLE_EXA
           }
-          // kilocode_change end
+          // ggai_change end
 
           // use apply tool in same format as codex
           const usePatch =

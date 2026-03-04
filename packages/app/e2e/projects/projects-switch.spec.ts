@@ -1,4 +1,4 @@
-import { base64Decode } from "@opencode-ai/util/encode"
+import { base64Decode } from "@ggai/util/encode"
 import { test, expect } from "../fixtures"
 import {
   defocus,
@@ -47,7 +47,7 @@ test("can switch between projects from sidebar", async ({ page, withProject }) =
 })
 
 test("switching back to a project opens the latest workspace session", async ({ page, withProject }) => {
-  test.skip(process.platform === "win32", "Skipping on Windows due to hover/menu interaction issues") // kilocode_change
+  test.skip(process.platform === "win32", "Skipping on Windows due to hover/menu interaction issues") // ggai_change
   await page.setViewportSize({ width: 1400, height: 800 })
 
   const other = await createTestProject()

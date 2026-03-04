@@ -12,7 +12,7 @@ const ctx = {
   sessionID: "test",
   messageID: "",
   callID: "",
-  agent: "code", // kilocode_change
+  agent: "code", // ggai_change
   abort: AbortSignal.any([]),
   messages: [],
   metadata: () => {},

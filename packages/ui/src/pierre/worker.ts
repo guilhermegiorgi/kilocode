@@ -19,7 +19,7 @@ function createPool(lineDiffType: "none" | "word-alt") {
       poolSize: 2,
     },
     {
-      theme: "Kilo", // kilocode_change
+      theme: "Kilo", // ggai_change
       lineDiffType,
       preferredHighlighter: "shiki-wasm",
     },

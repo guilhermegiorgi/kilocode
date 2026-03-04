@@ -10,7 +10,7 @@ import { Config } from "../../config/config"
 import { Global } from "../../global"
 import { Plugin } from "../../plugin"
 import { Instance } from "../../project/instance"
-import type { Hooks } from "@kilocode/plugin"
+import type { Hooks } from "@ggai/plugin"
 import { Process } from "../../util/process"
 import { text } from "node:stream/consumers"
 
@@ -206,7 +206,7 @@ export const AuthListCommand = cmd({
   aliases: ["ls"],
   describe: "list providers",
   async handler() {
-    // kilocode_change start - wrap with Instance.provide for ModelsDev.get() -> Config.get() dependency
+    // ggai_change start - wrap with Instance.provide for ModelsDev.get() -> Config.get() dependency
     await Instance.provide({
       directory: process.cwd(),
       async fn() {
@@ -251,7 +251,7 @@ export const AuthListCommand = cmd({
         }
       },
     })
-    // kilocode_change end
+    // ggai_change end
   },
 })
 
@@ -260,7 +260,7 @@ export const AuthLoginCommand = cmd({
   describe: "log in to a provider",
   builder: (yargs) =>
     yargs.positional("url", {
-      describe: "kilo auth provider", // kilocode_change
+      describe: "kilo auth provider", // ggai_change
       type: "string",
     }),
   async handler(args) {
@@ -312,7 +312,7 @@ export const AuthLoginCommand = cmd({
           return filtered
         })
 
-        // kilocode_change start
+        // ggai_change start
         const priority: Record<string, number> = {
           kilo: 0,
           opencode: 1,
@@ -323,7 +323,7 @@ export const AuthLoginCommand = cmd({
           openrouter: 6,
           vercel: 7,
         }
-        // kilocode_change end
+        // ggai_change end
 
         const pluginProviders = resolvePluginProviders({
           hooks: await Plugin.list(),
@@ -347,7 +347,7 @@ export const AuthLoginCommand = cmd({
                 label: x.name,
                 value: x.id,
                 hint: {
-                  kilo: "recommended", // kilocode_change
+                  kilo: "recommended", // ggai_change
                   opencode: "recommended",
                   anthropic: "Claude Max or API key",
                   openai: "ChatGPT Plus/Pro or API key",
@@ -439,7 +439,7 @@ export const AuthLogoutCommand = cmd({
   command: "logout",
   describe: "log out from a configured provider",
   async handler() {
-    // kilocode_change start - wrap with Instance.provide for ModelsDev.get() -> Config.get() dependency
+    // ggai_change start - wrap with Instance.provide for ModelsDev.get() -> Config.get() dependency
     await Instance.provide({
       directory: process.cwd(),
       async fn() {
@@ -463,6 +463,6 @@ export const AuthLogoutCommand = cmd({
         prompts.outro("Logout successful")
       },
     })
-    // kilocode_change end
+    // ggai_change end
   },
 })

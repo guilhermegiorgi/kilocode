@@ -35,14 +35,14 @@ inputs:
     required: false
 
   oidc_base_url:
-    description: "Base URL for OIDC token exchange API. Only required when running a custom GitHub App install. Defaults to https://api.kilo.ai"
+    description: "Base URL for OIDC token exchange API. Only required when running a custom GitHub App install. Defaults to https://api.gg.ai"
     required: false
 
-  kilo_api_key:
+  ggai_api_key:
     description: "Kilo API key for gateway authentication"
     required: false
 
-  kilo_org_id:
+  ggai_org_id:
     description: "Kilo organization ID"
     required: false
 
@@ -53,7 +53,7 @@ runs:
       id: version
       shell: bash
       run: |
-        VERSION=$(curl -sf https://api.github.com/repos/Kilo-Org/kilocode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
+        VERSION=$(curl -sf https://api.github.com/repos/genesisgrid/kilocode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
         echo "version=${VERSION:-latest}" >> $GITHUB_OUTPUT
 
     - name: Cache Kilo
@@ -66,7 +66,7 @@ runs:
     - name: Install Kilo
       if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      run: curl -fsSL https://kilo.ai/cli/install | bash
+      run: curl -fsSL https://gg.ai/cli/install | bash
 
     - name: Add Kilo to PATH
       shell: bash
@@ -85,5 +85,5 @@ runs:
         MENTIONS: ${{ inputs.mentions }}
         VARIANT: ${{ inputs.variant }}
         OIDC_BASE_URL: ${{ inputs.oidc_base_url }}
-        KILO_API_KEY: ${{ inputs.kilo_api_key }}
-        KILO_ORG_ID: ${{ inputs.kilo_org_id }}
+        GGAI_API_KEY: ${{ inputs.ggai_api_key }}
+        GGAI_ORG_ID: ${{ inputs.ggai_org_id }}

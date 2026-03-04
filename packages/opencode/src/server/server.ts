@@ -9,7 +9,7 @@ import { proxy } from "hono/proxy"
 import { basicAuth } from "hono/basic-auth"
 import z from "zod"
 import { Provider } from "../provider/provider"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { LSP } from "../lsp"
 import { Format } from "../format"
 import { TuiRoutes } from "./routes/tui"
@@ -18,8 +18,8 @@ import { Vcs } from "../project/vcs"
 import { Agent } from "../agent/agent"
 import { Skill } from "../skill/skill"
 import { Auth } from "../auth"
-import { ModelCache } from "../provider/model-cache" // kilocode_change
-import { scheduleDisposeAll } from "../kilocode/dispose" // kilocode_change
+import { ModelCache } from "../provider/model-cache" // ggai_change
+import { scheduleDisposeAll } from "../ggai/dispose" // ggai_change
 import { Flag } from "../flag/flag"
 import { Command } from "../command"
 import { Global } from "../global"
@@ -30,13 +30,13 @@ import { McpRoutes } from "./routes/mcp"
 import { FileRoutes } from "./routes/file"
 import { ConfigRoutes } from "./routes/config"
 import { ExperimentalRoutes } from "./routes/experimental"
-import { TelemetryRoutes } from "./routes/telemetry" // kilocode_change
+import { TelemetryRoutes } from "./routes/telemetry" // ggai_change
 import { ProviderRoutes } from "./routes/provider"
-import { createKiloRoutes } from "@kilocode/kilo-gateway" // kilocode_change
-import { Database } from "../storage/db" // kilocode_change
-import { Session } from "../session" // kilocode_change
-import { Identifier } from "../id/id" // kilocode_change
-import { SessionTable, MessageTable, PartTable } from "../session/session.sql" // kilocode_change
+import { createKiloRoutes } from "@ggai/gateway" // ggai_change
+import { Database } from "../storage/db" // ggai_change
+import { Session } from "../session" // ggai_change
+import { Identifier } from "../id/id" // ggai_change
+import { SessionTable, MessageTable, PartTable } from "../session/session.sql" // ggai_change
 import { lazy } from "../util/lazy"
 import { InstanceBootstrap } from "../project/bootstrap"
 import { NotFoundError } from "../storage/db"
@@ -45,7 +45,7 @@ import { websocket } from "hono/bun"
 import { HTTPException } from "hono/http-exception"
 import { errors } from "./error"
 import { CommitMessageRoutes } from "./routes/commit-message"
-import { EnhancePromptRoutes } from "./routes/enhance-prompt" // kilocode_change
+import { EnhancePromptRoutes } from "./routes/enhance-prompt" // ggai_change
 import { QuestionRoutes } from "./routes/question"
 import { PermissionRoutes } from "./routes/permission"
 import { GlobalRoutes } from "./routes/global"
@@ -91,9 +91,9 @@ export namespace Server {
           // Allow CORS preflight requests to succeed without auth.
           // Browser clients sending Authorization headers will preflight with OPTIONS.
           if (c.req.method === "OPTIONS") return next()
-          const password = Flag.KILO_SERVER_PASSWORD
+          const password = Flag.GGAI_SERVER_PASSWORD
           if (!password) return next()
-          const username = Flag.KILO_SERVER_USERNAME ?? "kilo" // kilocode_change
+          const username = Flag.GGAI_SERVER_USERNAME ?? "kilo" // ggai_change
           return basicAuth({ username, password })(c, next)
         })
         .use(async (c, next) => {
@@ -169,10 +169,10 @@ export namespace Server {
             const providerID = c.req.valid("param").providerID
             const info = c.req.valid("json")
             await Auth.set(providerID, info)
-            // kilocode_change start - invalidate provider/model cache after auth change
+            // ggai_change start - invalidate provider/model cache after auth change
             ModelCache.clear(providerID)
             scheduleDisposeAll()
-            // kilocode_change end
+            // ggai_change end
             return c.json(true)
           },
         )
@@ -203,10 +203,10 @@ export namespace Server {
           async (c) => {
             const providerID = c.req.valid("param").providerID
             await Auth.remove(providerID)
-            // kilocode_change start - invalidate provider/model cache after auth removal
+            // ggai_change start - invalidate provider/model cache after auth removal
             ModelCache.clear(providerID)
             scheduleDisposeAll()
-            // kilocode_change end
+            // ggai_change end
             return c.json(true)
           },
         )
@@ -250,10 +250,10 @@ export namespace Server {
         .route("/permission", PermissionRoutes())
         .route("/question", QuestionRoutes())
         .route("/provider", ProviderRoutes())
-        .route("/telemetry", TelemetryRoutes()) // kilocode_change
-        .route("/commit-message", CommitMessageRoutes()) // kilocode_change
-        .route("/enhance-prompt", EnhancePromptRoutes()) // kilocode_change
-        // kilocode_change start - Kilo Gateway routes
+        .route("/telemetry", TelemetryRoutes()) // ggai_change
+        .route("/commit-message", CommitMessageRoutes()) // ggai_change
+        .route("/enhance-prompt", EnhancePromptRoutes()) // ggai_change
+        // ggai_change start - Kilo Gateway routes
         .route(
           "/kilo",
           createKiloRoutes({
@@ -264,18 +264,18 @@ export namespace Server {
             errors,
             Auth,
             z,
-            Database, // kilocode_change
-            Instance, // kilocode_change
-            SessionTable, // kilocode_change
-            MessageTable, // kilocode_change
-            PartTable, // kilocode_change
-            SessionToRow: Session.toRow, // kilocode_change
-            Bus, // kilocode_change
-            SessionCreatedEvent: Session.Event.Created, // kilocode_change
-            Identifier, // kilocode_change
+            Database, // ggai_change
+            Instance, // ggai_change
+            SessionTable, // ggai_change
+            MessageTable, // ggai_change
+            PartTable, // ggai_change
+            SessionToRow: Session.toRow, // ggai_change
+            Bus, // ggai_change
+            SessionCreatedEvent: Session.Event.Created, // ggai_change
+            Identifier, // ggai_change
           }),
         )
-        // kilocode_change end
+        // ggai_change end
         .route("/", FileRoutes())
         .route("/mcp", McpRoutes())
         .route("/tui", TuiRoutes())

@@ -1,8 +1,8 @@
 import { For, Show } from "solid-js"
-import type { PermissionRequest } from "@kilocode/sdk/v2"
-import { Button } from "@opencode-ai/ui/button"
-import { DockPrompt } from "@opencode-ai/ui/dock-prompt"
-import { Icon } from "@opencode-ai/ui/icon"
+import type { PermissionRequest } from "@ggai/sdk/v2"
+import { Button } from "@ggai/ui-core/button"
+import { DockPrompt } from "@ggai/ui-core/dock-prompt"
+import { Icon } from "@ggai/ui-core/icon"
 import { useLanguage } from "@/context/language"
 
 export function SessionPermissionDock(props: {

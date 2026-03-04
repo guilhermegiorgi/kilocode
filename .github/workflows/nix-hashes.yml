@@ -92,8 +92,8 @@ jobs:
         uses: ./.github/actions/setup-git-committer
         with:
           # kilocode_change start
-          kilo-maintainer-app-id: ${{ secrets.KILO_MAINTAINER_APP_ID }}
-          kilo-maintainer-app-secret: ${{ secrets.KILO_MAINTAINER_APP_SECRET }}
+          kilo-maintainer-app-id: ${{ secrets.GGAI_MAINTAINER_APP_ID }}
+          kilo-maintainer-app-secret: ${{ secrets.GGAI_MAINTAINER_APP_SECRET }}
           # kilocode_change end
 
       - name: Pull latest changes

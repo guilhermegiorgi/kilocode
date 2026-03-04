@@ -7,13 +7,13 @@ import { Context } from "../util/context"
 import { lazy } from "../util/lazy"
 import { Global } from "../global"
 import { Log } from "../util/log"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import z from "zod"
 import path from "path"
 import { readFileSync, readdirSync, existsSync } from "fs"
 import * as schema from "./schema"
 
-declare const KILO_MIGRATIONS: { sql: string; timestamp: number }[] | undefined
+declare const GGAI_MIGRATIONS: { sql: string; timestamp: number }[] | undefined
 
 export const NotFoundError = NamedError.create(
   "NotFoundError",
@@ -86,13 +86,13 @@ export namespace Database {
 
     // Apply schema migrations
     const entries =
-      typeof KILO_MIGRATIONS !== "undefined"
-        ? KILO_MIGRATIONS
+      typeof GGAI_MIGRATIONS !== "undefined"
+        ? GGAI_MIGRATIONS
         : migrations(path.join(import.meta.dirname, "../../migration"))
     if (entries.length > 0) {
       log.info("applying migrations", {
         count: entries.length,
-        mode: typeof KILO_MIGRATIONS !== "undefined" ? "bundled" : "dev",
+        mode: typeof GGAI_MIGRATIONS !== "undefined" ? "bundled" : "dev",
       })
       migrate(db, entries)
     }

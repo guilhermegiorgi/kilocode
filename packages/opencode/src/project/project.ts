@@ -7,7 +7,7 @@ import { SessionTable } from "../session/session.sql"
 import { Log } from "../util/log"
 import { Flag } from "@/flag/flag"
 import { work } from "../util/queue"
-import { fn } from "@opencode-ai/util/fn"
+import { fn } from "@ggai/util/fn"
 import { BusEvent } from "@/bus/bus-event"
 import { iife } from "@/util/iife"
 import { GlobalBus } from "@/bus/global"
@@ -109,7 +109,7 @@ export namespace Project {
             id: id ?? "global",
             worktree: sandbox,
             sandbox: sandbox,
-            vcs: Info.shape.vcs.parse(Flag.KILO_FAKE_VCS),
+            vcs: Info.shape.vcs.parse(Flag.GGAI_FAKE_VCS),
           }
         }
 
@@ -132,7 +132,7 @@ export namespace Project {
               id: "global",
               worktree: sandbox,
               sandbox: sandbox,
-              vcs: Info.shape.vcs.parse(Flag.KILO_FAKE_VCS),
+              vcs: Info.shape.vcs.parse(Flag.GGAI_FAKE_VCS),
             }
           }
 
@@ -162,7 +162,7 @@ export namespace Project {
             id,
             sandbox,
             worktree: sandbox,
-            vcs: Info.shape.vcs.parse(Flag.KILO_FAKE_VCS),
+            vcs: Info.shape.vcs.parse(Flag.GGAI_FAKE_VCS),
           }
         }
 
@@ -183,7 +183,7 @@ export namespace Project {
             id,
             sandbox,
             worktree: sandbox,
-            vcs: Info.shape.vcs.parse(Flag.KILO_FAKE_VCS),
+            vcs: Info.shape.vcs.parse(Flag.GGAI_FAKE_VCS),
           }
         }
 
@@ -199,7 +199,7 @@ export namespace Project {
         id: "global",
         worktree: "/",
         sandbox: "/",
-        vcs: Info.shape.vcs.parse(Flag.KILO_FAKE_VCS),
+        vcs: Info.shape.vcs.parse(Flag.GGAI_FAKE_VCS),
       }
     })
 
@@ -222,7 +222,7 @@ export namespace Project {
       return fresh
     })
 
-    if (Flag.KILO_EXPERIMENTAL_ICON_DISCOVERY) discover(existing)
+    if (Flag.GGAI_EXPERIMENTAL_ICON_DISCOVERY) discover(existing)
 
     const result: Info = {
       ...existing,

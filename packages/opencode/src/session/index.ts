@@ -1,4 +1,4 @@
-import { Slug } from "@opencode-ai/util/slug"
+import { Slug } from "@ggai/util/slug"
 import path from "path"
 import { BusEvent } from "@/bus/bus-event"
 import { Bus } from "@/bus"
@@ -51,11 +51,11 @@ export namespace Session {
     const summary =
       row.summary_additions !== null || row.summary_deletions !== null || row.summary_files !== null
         ? {
-            additions: row.summary_additions ?? 0,
-            deletions: row.summary_deletions ?? 0,
-            files: row.summary_files ?? 0,
-            diffs: row.summary_diffs ?? undefined,
-          }
+          additions: row.summary_additions ?? 0,
+          deletions: row.summary_deletions ?? 0,
+          files: row.summary_files ?? 0,
+          diffs: row.summary_diffs ?? undefined,
+        }
         : undefined
     const share = row.share_url ? { url: row.share_url } : undefined
     const revert = row.revert ?? undefined
@@ -207,7 +207,7 @@ export namespace Session {
         error: MessageV2.Assistant.shape.error,
       }),
     ),
-    // kilocode_change start
+    // ggai_change start
     TurnOpen: BusEvent.define(
       "session.turn.open",
       z.object({
@@ -221,10 +221,10 @@ export namespace Session {
         reason: z.enum(["completed", "error", "interrupted"]),
       }),
     ),
-    // kilocode_change end
+    // ggai_change end
   }
 
-  // kilocode_change
+  // ggai_change
   export type CloseReason = z.infer<typeof Event.TurnClose.properties>["reason"]
 
   export const create = fn(
@@ -233,7 +233,7 @@ export namespace Session {
         parentID: Identifier.schema("session").optional(),
         title: z.string().optional(),
         permission: Info.shape.permission,
-        platform: z.string().optional(), // kilocode_change - per-session platform override for telemetry attribution
+        platform: z.string().optional(), // ggai_change - per-session platform override for telemetry attribution
       })
       .optional(),
     async (input) => {
@@ -243,22 +243,22 @@ export namespace Session {
         title: input?.title,
         permission: input?.permission,
       })
-      // kilocode_change start - store platform override for session ingest
+      // ggai_change start - store platform override for session ingest
       if (input?.platform) {
         platformOverrides.set(session.id, input.platform)
       }
-      // kilocode_change end
+      // ggai_change end
       return session
     },
   )
 
-  // kilocode_change start - per-session platform overrides for telemetry attribution
+  // ggai_change start - per-session platform overrides for telemetry attribution
   const platformOverrides = new Map<string, string>()
 
   export function getPlatformOverride(sessionId: string): string | undefined {
     return platformOverrides.get(sessionId)
   }
-  // kilocode_change end
+  // ggai_change end
 
   export const fork = fn(
     z.object({
@@ -348,7 +348,7 @@ export namespace Session {
       )
     })
     const cfg = await Config.get()
-    if (!result.parentID && (Flag.KILO_AUTO_SHARE || cfg.share === "auto"))
+    if (!result.parentID && (Flag.GGAI_AUTO_SHARE || cfg.share === "auto"))
       share(result.id).catch(() => {
         // Silently ignore sharing errors during session creation
       })
@@ -376,8 +376,8 @@ export namespace Session {
     if (cfg.share === "disabled") {
       throw new Error("Sharing is disabled in configuration")
     }
-    const { KiloSessions } = await import("@/kilo-sessions/kilo-sessions")
-    const share = await KiloSessions.share(id) // kilocode_change
+    const { GGAISessions } = await import("@/ggai-sessions/ggai-sessions")
+    const share = await GGAISessions.share(id) // ggai_change
     Database.use((db) => {
       const row = db.update(SessionTable).set({ share_url: share.url }).where(eq(SessionTable.id, id)).returning().get()
       if (!row) throw new NotFoundError({ message: `Session not found: ${id}` })
@@ -389,8 +389,8 @@ export namespace Session {
 
   export const unshare = fn(Identifier.schema("session"), async (id) => {
     // Use ShareNext to remove the share (same as share function uses ShareNext to create)
-    const { KiloSessions } = await import("@/kilo-sessions/kilo-sessions")
-    await KiloSessions.unshare(id) // kilocode_change
+    const { GGAISessions } = await import("@/ggai-sessions/ggai-sessions")
+    await GGAISessions.unshare(id) // ggai_change
     Database.use((db) => {
       const row = db.update(SessionTable).set({ share_url: null }).where(eq(SessionTable.id, id)).returning().get()
       if (!row) throw new NotFoundError({ message: `Session not found: ${id}` })
@@ -633,9 +633,9 @@ export namespace Session {
       const query =
         conditions.length > 0
           ? db
-              .select()
-              .from(SessionTable)
-              .where(and(...conditions))
+            .select()
+            .from(SessionTable)
+            .where(and(...conditions))
           : db.select().from(SessionTable)
       return query.orderBy(desc(SessionTable.time_updated), desc(SessionTable.id)).limit(limit).all()
     })
@@ -685,12 +685,12 @@ export namespace Session {
       for (const child of await children(sessionID)) {
         await remove(child.id)
       }
-      const { KiloSessions } = await import("@/kilo-sessions/kilo-sessions")
-      await KiloSessions.remove(sessionID).catch(() => {}) // kilocode_change
-      platformOverrides.delete(sessionID) // kilocode_change - clean up platform override
-      // kilocode_change start - cancel running processor before deleting to avoid FK constraint errors
+      const { GGAISessions } = await import("@/ggai-sessions/ggai-sessions")
+      await GGAISessions.remove(sessionID).catch(() => { }) // ggai_change
+      platformOverrides.delete(sessionID) // ggai_change - clean up platform override
+      // ggai_change start - cancel running processor before deleting to avoid FK constraint errors
       SessionPrompt.cancel(sessionID)
-      // kilocode_change end
+      // ggai_change end
       // CASCADE delete handles messages and parts automatically
       Database.use((db) => {
         db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
@@ -708,7 +708,7 @@ export namespace Session {
   export const updateMessage = fn(MessageV2.Info, async (msg) => {
     const time_created = msg.time.created
     const { id, sessionID, ...data } = msg
-    // kilocode_change start - ignore FK errors when session was deleted while processor was still running
+    // ggai_change start - ignore FK errors when session was deleted while processor was still running
     try {
       Database.use((db) => {
         db.insert(MessageTable)
@@ -733,7 +733,7 @@ export namespace Session {
         throw e
       }
     }
-    // kilocode_change end
+    // ggai_change end
     return msg
   })
 
@@ -787,7 +787,7 @@ export namespace Session {
   export const updatePart = fn(UpdatePartInput, async (part) => {
     const { id, messageID, sessionID, ...data } = part
     const time = Date.now()
-    // kilocode_change start - ignore FK errors when session was deleted while processor was still running
+    // ggai_change start - ignore FK errors when session was deleted while processor was still running
     try {
       Database.use((db) => {
         db.insert(PartTable)
@@ -813,7 +813,7 @@ export namespace Session {
         throw e
       }
     }
-    // kilocode_change end
+    // ggai_change end
     return part
   })
 
@@ -835,7 +835,7 @@ export namespace Session {
       model: z.custom<Provider.Model>(),
       usage: z.custom<LanguageModelV2Usage>(),
       metadata: z.custom<ProviderMetadata>().optional(),
-      provider: z.custom<Provider.Info>().optional(), // kilocode_change
+      provider: z.custom<Provider.Info>().optional(), // ggai_change
     }),
     (input) => {
       const safe = (value: number) => {
@@ -889,15 +889,15 @@ export namespace Session {
         },
       }
 
-      // kilocode_change start - Use provider-reported cost when available for OpenRouter/Kilo
+      // ggai_change start - Use provider-reported cost when available for OpenRouter/Kilo
       // The OpenRouter AI SDK provider exposes cost at providerMetadata.openrouter.usage
       // Reference: https://openrouter.ai/docs/use-cases/usage-accounting
       // Note: The AI SDK uses camelCase (upstreamInferenceCost), not snake_case
       const openrouterUsage = input.metadata?.["openrouter"]?.["usage"] as
         | {
-            cost?: number
-            costDetails?: { upstreamInferenceCost?: number }
-          }
+          cost?: number
+          costDetails?: { upstreamInferenceCost?: number }
+        }
         | undefined
 
       if (openrouterUsage) {
@@ -918,7 +918,7 @@ export namespace Session {
           }
         }
       }
-      // kilocode_change end
+      // ggai_change end
 
       const costInfo =
         input.model.cost?.experimentalOver200K && tokens.input + tokens.cache.read > 200_000

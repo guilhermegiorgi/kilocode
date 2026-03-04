@@ -1,7 +1,7 @@
-import type { Todo } from "@kilocode/sdk/v2"
-import { Checkbox } from "@opencode-ai/ui/checkbox"
-import { DockTray } from "@opencode-ai/ui/dock-surface"
-import { IconButton } from "@opencode-ai/ui/icon-button"
+import type { Todo } from "@ggai/sdk/v2"
+import { Checkbox } from "@ggai/ui-core/checkbox"
+import { DockTray } from "@ggai/ui-core/dock-surface"
+import { IconButton } from "@ggai/ui-core/icon-button"
 import { For, Show, createEffect, createMemo, createSignal, on, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
 

@@ -1,0 +1,734 @@
+{
+  "name": "ggai-code",
+  "displayName": "GG.AI Code: AI Coding Agent, Copilot, and Autocomplete",
+  "description": "Open Source AI coding agent that generates code from natural language, automates tasks, and runs terminal commands. Features inline autocomplete, browser automation, automated refactoring, and custom modes for planning, coding, and debugging. Supports 500+ AI models including Claude (Anthropic), Gemini, Grok, GPT, Codex and GLM.",
+  "version": "7.0.37",
+  "icon": "assets/icons/logo-outline-black.png",
+  "galleryBanner": {
+    "color": "#FFFFFF",
+    "theme": "light"
+  },
+  "publisher": "genesisgrid",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/genesisgrid/kilocode.git",
+    "directory": "packages/kilo-vscode"
+  },
+  "engines": {
+    "vscode": "^1.108.0"
+  },
+  "author": {
+    "name": "Genesis Grid AI Labs"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Programming Languages",
+    "Education",
+    "Snippets",
+    "Testing"
+  ],
+  "keywords": [
+    "ggai",
+    "genesis",
+    "grid",
+    "claude",
+    "dev",
+    "mcp",
+    "openrouter",
+    "coding",
+    "agent",
+    "autonomous",
+    "chatgpt",
+    "sonnet",
+    "ai",
+    "llama",
+    "Genesis Grid AI Labs",
+    "ggai-code"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ggai-code-sidebar",
+          "title": "GG.AI Code",
+          "icon": "assets/icons/kilo-light.png",
+          "darkIcon": "assets/icons/kilo-dark.png"
+        }
+      ]
+    },
+    "views": {
+      "ggai-code-sidebar": [
+        {
+          "type": "webview",
+          "id": "ggai-code.new.sidebarView",
+          "name": "GG.AI Code"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "ggai-code.new.plusButtonClicked",
+        "title": "New Task",
+        "icon": "$(add)"
+      },
+      {
+        "command": "ggai-code.new.agentManagerOpen",
+        "title": "Agent Manager",
+        "icon": "$(circuit-board)"
+      },
+      {
+        "command": "ggai-code.new.marketplaceButtonClicked",
+        "title": "Marketplace",
+        "icon": "$(extensions)"
+      },
+      {
+        "command": "ggai-code.new.historyButtonClicked",
+        "title": "History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "ggai-code.new.cloudHistoryButtonClicked",
+        "title": "Cloud History",
+        "icon": "$(cloud)"
+      },
+      {
+        "command": "ggai-code.new.profileButtonClicked",
+        "title": "Profile",
+        "icon": "$(account)"
+      },
+      {
+        "command": "ggai-code.new.settingsButtonClicked",
+        "title": "Settings",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "ggai-code.new.openInTab",
+        "title": "GG.AI Code",
+        "icon": {
+          "light": "assets/icons/kilo-light.svg",
+          "dark": "assets/icons/kilo-dark.svg"
+        }
+      },
+      {
+        "command": "ggai-code.new.openMigrationWizard",
+        "title": "Migrate Settings from Legacy Version",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.autocomplete.generateSuggestions",
+        "title": "Generate Suggested Edits",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.previousSession",
+        "title": "Agent Manager: Previous Session",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.nextSession",
+        "title": "Agent Manager: Next Session",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.previousTab",
+        "title": "Agent Manager: Previous Tab",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.nextTab",
+        "title": "Agent Manager: Next Tab",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.showTerminal",
+        "title": "Agent Manager: Focus Terminal",
+        "category": "GG.AI Code",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "ggai-code.new.agentManager.toggleDiff",
+        "title": "Agent Manager: Toggle Diff Panel",
+        "category": "GG.AI Code",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "ggai-code.new.agentManager.focusPanel",
+        "title": "Agent Manager: Focus Panel",
+        "category": "GG.AI Code",
+        "icon": "$(circuit-board)"
+      },
+      {
+        "command": "ggai-code.new.agentManager.newTab",
+        "title": "Agent Manager: New Tab",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.closeTab",
+        "title": "Agent Manager: Close Tab",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.newWorktree",
+        "title": "Agent Manager: New Worktree",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.closeWorktree",
+        "title": "Agent Manager: Close Worktree",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.advancedWorktree",
+        "title": "Agent Manager: Advanced New Worktree",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo1",
+        "title": "Agent Manager: Jump to Item 1",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo2",
+        "title": "Agent Manager: Jump to Item 2",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo3",
+        "title": "Agent Manager: Jump to Item 3",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo4",
+        "title": "Agent Manager: Jump to Item 4",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo5",
+        "title": "Agent Manager: Jump to Item 5",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo6",
+        "title": "Agent Manager: Jump to Item 6",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo7",
+        "title": "Agent Manager: Jump to Item 7",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo8",
+        "title": "Agent Manager: Jump to Item 8",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo9",
+        "title": "Agent Manager: Jump to Item 9",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.generateCommitMessage",
+        "title": "Generate Commit Message",
+        "category": "GG.AI Code",
+        "icon": {
+          "light": "assets/icons/kilo-light.svg",
+          "dark": "assets/icons/kilo-dark.svg"
+        }
+      },
+      {
+        "command": "ggai-code.new.explainCode",
+        "title": "Explain Code",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.fixCode",
+        "title": "Fix Code",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.improveCode",
+        "title": "Improve Code",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.addToContext",
+        "title": "Add to Context",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.terminalAddToContext",
+        "title": "Add Terminal Content to Context",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.terminalFixCommand",
+        "title": "Fix This Command",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.terminalExplainCommand",
+        "title": "Explain This Command",
+        "category": "GG.AI Code"
+      },
+      {
+        "command": "ggai-code.new.focusChatInput",
+        "title": "Focus Chat Input",
+        "category": "GG.AI Code"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "ggai-code.new.editorContextMenu",
+        "label": "GG.AI Code"
+      },
+      {
+        "id": "ggai-code.new.terminalContextMenu",
+        "label": "GG.AI Code"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "ggai-code.new.plusButtonClicked",
+          "group": "navigation@0",
+          "when": "view == ggai-code.new.sidebarView"
+        },
+        {
+          "command": "ggai-code.new.agentManagerOpen",
+          "group": "navigation@1",
+          "when": "view == ggai-code.new.sidebarView"
+        },
+        {
+          "command": "ggai-code.new.marketplaceButtonClicked",
+          "group": "navigation@2",
+          "when": "view == ggai-code.new.sidebarView"
+        },
+        {
+          "command": "ggai-code.new.cloudHistoryButtonClicked",
+          "group": "navigation@3",
+          "when": "view == ggai-code.new.sidebarView"
+        },
+        {
+          "command": "ggai-code.new.historyButtonClicked",
+          "group": "navigation@4",
+          "when": "view == ggai-code.new.sidebarView"
+        },
+        {
+          "command": "ggai-code.new.profileButtonClicked",
+          "group": "navigation@5",
+          "when": "view == ggai-code.new.sidebarView"
+        },
+        {
+          "command": "ggai-code.new.settingsButtonClicked",
+          "group": "navigation@6",
+          "when": "view == ggai-code.new.sidebarView"
+        }
+      ],
+      "scm/title": [
+        {
+          "command": "ggai-code.new.generateCommitMessage",
+          "group": "navigation",
+          "when": "scmProvider == git"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "ggai-code.new.openInTab",
+          "group": "navigation",
+          "when": "true"
+        }
+      ],
+      "editor/context": [
+        {
+          "submenu": "ggai-code.new.editorContextMenu",
+          "group": "1_ggai"
+        }
+      ],
+      "ggai-code.new.editorContextMenu": [
+        {
+          "command": "ggai-code.new.explainCode",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "ggai-code.new.fixCode",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "ggai-code.new.improveCode",
+          "group": "1_actions@3"
+        },
+        {
+          "command": "ggai-code.new.addToContext",
+          "group": "1_actions@4"
+        }
+      ],
+      "terminal/context": [
+        {
+          "submenu": "ggai-code.new.terminalContextMenu",
+          "group": "2_ggai"
+        }
+      ],
+      "ggai-code.new.terminalContextMenu": [
+        {
+          "command": "ggai-code.new.terminalAddToContext",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "ggai-code.new.terminalFixCommand",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "ggai-code.new.terminalExplainCommand",
+          "group": "1_actions@3"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "ggai-code.new.focusChatInput",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      },
+      {
+        "command": "ggai-code.new.agentManagerOpen",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m"
+      },
+      {
+        "command": "ggai-code.new.addToContext",
+        "key": "ctrl+k ctrl+a",
+        "mac": "cmd+k cmd+a",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "ggai-code.new.agentManager.previousSession",
+        "key": "ctrl+alt+up",
+        "mac": "cmd+alt+up",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.nextSession",
+        "key": "ctrl+alt+down",
+        "mac": "cmd+alt+down",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.previousTab",
+        "key": "ctrl+alt+left",
+        "mac": "cmd+alt+left",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.nextTab",
+        "key": "ctrl+alt+right",
+        "mac": "cmd+alt+right",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.showTerminal",
+        "key": "ctrl+/",
+        "mac": "cmd+/",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.toggleDiff",
+        "key": "ctrl+d",
+        "mac": "cmd+d",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.focusPanel",
+        "key": "ctrl+.",
+        "mac": "cmd+.",
+        "when": "terminalFocus && ggai-code.agentTerminalFocus"
+      },
+      {
+        "command": "ggai-code.new.agentManager.newTab",
+        "key": "ctrl+t",
+        "mac": "cmd+t",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.closeTab",
+        "key": "ctrl+w",
+        "mac": "cmd+w",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.newWorktree",
+        "key": "ctrl+n",
+        "mac": "cmd+n",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.closeWorktree",
+        "key": "ctrl+shift+w",
+        "mac": "cmd+shift+w",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.advancedWorktree",
+        "key": "ctrl+shift+n",
+        "mac": "cmd+shift+n",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo1",
+        "key": "ctrl+1",
+        "mac": "cmd+1",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo2",
+        "key": "ctrl+2",
+        "mac": "cmd+2",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo3",
+        "key": "ctrl+3",
+        "mac": "cmd+3",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo4",
+        "key": "ctrl+4",
+        "mac": "cmd+4",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo5",
+        "key": "ctrl+5",
+        "mac": "cmd+5",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo6",
+        "key": "ctrl+6",
+        "mac": "cmd+6",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo7",
+        "key": "ctrl+7",
+        "mac": "cmd+7",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo8",
+        "key": "ctrl+8",
+        "mac": "cmd+8",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      },
+      {
+        "command": "ggai-code.new.agentManager.jumpTo9",
+        "key": "ctrl+9",
+        "mac": "cmd+9",
+        "when": "activeWebviewPanelId == 'ggai-code.new.AgentManagerPanel'"
+      }
+    ],
+    "configuration": {
+      "title": "GG.AI Code",
+      "properties": {
+        "ggai-code.new.language": {
+          "type": "string",
+          "default": "",
+          "description": "Override the UI language for GG.AI Code (e.g. en, de, ja). Empty means use VS Code's display language.",
+          "enum": [
+            "",
+            "en",
+            "zh",
+            "zht",
+            "ko",
+            "de",
+            "es",
+            "fr",
+            "da",
+            "ja",
+            "pl",
+            "ru",
+            "ar",
+            "no",
+            "br",
+            "th",
+            "bs"
+          ],
+          "enumDescriptions": [
+            "Auto (VS Code language)",
+            "English",
+            "简体中文",
+            "繁體中文",
+            "한국어",
+            "Deutsch",
+            "Español",
+            "Français",
+            "Dansk",
+            "日本語",
+            "Polski",
+            "Русский",
+            "العربية",
+            "Norsk",
+            "Português (Brasil)",
+            "ภาษาไทย",
+            "Bosanski"
+          ]
+        },
+        "ggai-code.new.model.providerID": {
+          "type": "string",
+          "default": "ggai",
+          "description": "Default model provider ID for new sessions"
+        },
+        "ggai-code.new.model.modelID": {
+          "type": "string",
+          "default": "ggai/auto",
+          "description": "Default model ID for new sessions"
+        },
+        "ggai-code.new.autocomplete.enableAutoTrigger": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic inline completion suggestions"
+        },
+        "ggai-code.new.autocomplete.enableSmartInlineTaskKeybinding": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable smart inline task keybinding"
+        },
+        "ggai-code.new.autocomplete.enableChatAutocomplete": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable chat textarea autocomplete"
+        },
+        "ggai-code.new.browserAutomation.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable browser automation powered by Playwright. When enabled, the AI agent can interact with web pages in a visible Chrome window."
+        },
+        "ggai-code.new.browserAutomation.useSystemChrome": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use your system's installed Chrome browser instead of downloading a separate Chromium instance."
+        },
+        "ggai-code.new.browserAutomation.headless": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run browser automation in headless mode (no visible window). When disabled, you can watch the agent interact with the browser."
+        },
+        "ggai-code.new.notifications.agent": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notification when agent completes a task"
+        },
+        "ggai-code.new.notifications.permissions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notification on permission requests"
+        },
+        "ggai-code.new.notifications.errors": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notification on errors"
+        },
+        "ggai-code.new.sounds.agent": {
+          "type": "string",
+          "default": "default",
+          "enum": [
+            "default",
+            "none"
+          ],
+          "description": "Sound to play when agent completes"
+        },
+        "ggai-code.new.sounds.permissions": {
+          "type": "string",
+          "default": "default",
+          "enum": [
+            "default",
+            "none"
+          ],
+          "description": "Sound to play on permission requests"
+        },
+        "ggai-code.new.sounds.errors": {
+          "type": "string",
+          "default": "default",
+          "enum": [
+            "default",
+            "none"
+          ],
+          "description": "Sound to play on errors"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "prepare:cli-binary": "bun script/local-bin.ts",
+    "compile": "bun run prepare:cli-binary && bun run rebuild-sdk && bun run check-types && bun run lint && node esbuild.js",
+    "watch": "bun run rebuild-sdk && bun run --parallel watch:esbuild watch:tsc",
+    "watch:esbuild": "bun run prepare:cli-binary && node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "watch:cli": "bun script/watch-cli.ts",
+    "package": "bun run prepare:cli-binary && bun run rebuild-sdk && bun run check-types && bun run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "bun run compile-tests && bun run compile && bun run lint",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "test:unit": "bun test tests/unit/",
+    "rebuild-sdk": "bun run --cwd ../sdk/js build",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build -o storybook-static",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@storybook/addon-docs": "10.2.10",
+    "@types/diff": "^6.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/qrcode": "^1.5.6",
+    "@types/vscode": "^1.108.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.27.2",
+    "esbuild-plugin-solid": "^0.6.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.1",
+    "qrcode": "^1.5.4",
+    "storybook": "10.2.10",
+    "storybook-solidjs-vite": "10.0.9",
+    "ts-morph": "27.0.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0",
+    "vite": "7.3.1",
+    "vite-plugin-solid": "2.11.10",
+    "@vscode/vsce": "^3.7.1"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@ggai/i18n": "workspace:*",
+    "@ggai/ui": "workspace:*",
+    "@ggai/sdk": "workspace:*",
+    "@ggai/ui-core": "workspace:*",
+    "@thisbeyond/solid-dnd": "0.7.5",
+    "diff": "^7.0.0",
+    "dotenv": "^16.4.7",
+    "fastest-levenshtein": "^1.0.16",
+    "ignore": "^7.0.3",
+    "js-tiktoken": "^1.0.18",
+    "lru-cache": "^11.0.2",
+    "openai": "^4.85.4",
+    "quick-lru": "^7.0.0",
+    "simple-git": "3.31.1",
+    "solid-js": "^1.9.11",
+    "uri-js": "^4.4.1",
+    "web-tree-sitter": "^0.24.7",
+    "zod": "^3.24.2"
+  }
+}

@@ -74,5 +74,5 @@ fn main() {
         }
     }
 
-    kilo_lib::run()
+    ggai_lib::run()
 }

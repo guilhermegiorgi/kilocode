@@ -2,7 +2,7 @@ import path from "path"
 import os from "os"
 import z from "zod"
 import { type ParseError as JsoncParseError, parse as parseJsonc, printParseErrorCode } from "jsonc-parser"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { Filesystem } from "@/util/filesystem"
 import { Flag } from "@/flag/flag"
 import { Global } from "@/global"
@@ -22,10 +22,10 @@ export namespace ConfigPaths {
   export async function directories(directory: string, worktree: string) {
     return [
       Global.Path.config,
-      ...(!Flag.KILO_DISABLE_PROJECT_CONFIG
+      ...(!Flag.GGAI_DISABLE_PROJECT_CONFIG
         ? await Array.fromAsync(
             Filesystem.up({
-              targets: [".kilo", ".opencode"], // kilocode_change
+              targets: [".kilo", ".opencode"], // ggai_change
               start: directory,
               stop: worktree,
             }),
@@ -33,12 +33,12 @@ export namespace ConfigPaths {
         : []),
       ...(await Array.fromAsync(
         Filesystem.up({
-          targets: [".kilo", ".opencode"], // kilocode_change
+          targets: [".kilo", ".opencode"], // ggai_change
           start: Global.Path.home,
           stop: Global.Path.home,
         }),
       )),
-      ...(Flag.KILO_CONFIG_DIR ? [Flag.KILO_CONFIG_DIR] : []),
+      ...(Flag.GGAI_CONFIG_DIR ? [Flag.GGAI_CONFIG_DIR] : []),
     ]
   }
 

@@ -5,21 +5,21 @@
  * This script handles i18n files by:
  * 1. Taking upstream's version as the base (to get new translation keys)
  * 2. Applying intelligent string replacements for Kilo branding
- * 3. Preserving lines marked with `// kilocode_change`
+ * 3. Preserving lines marked with `// ggai_change`
  *
  * String replacement rules:
- * - opencode.ai -> kilo.ai (domain)
- * - app.opencode.ai -> app.kilo.ai (app domain)
+ * - opencode.ai -> gg.ai (domain)
+ * - app.opencode.ai -> app.gg.ai (app domain)
  * - OpenCode Desktop -> Kilo Desktop (desktop app name)
  * - OpenCode -> Kilo (product name in user-visible text)
  * - opencode upgrade -> kilo upgrade (CLI commands)
  * - npx opencode -> npx kilo (CLI invocation)
- * - anomalyco/opencode -> Kilo-Org/kilocode (GitHub repo)
+ * - anomalyco/opencode -> genesisgrid/kilocode (GitHub repo)
  *
  * Preserved (not replaced):
  * - opencode.json (actual config filename)
  * - .opencode/ (actual directory name)
- * - Lines with `// kilocode_change`
+ * - Lines with `// ggai_change`
  */
 
 import { $ } from "bun"
@@ -51,24 +51,24 @@ const I18N_REPLACEMENTS: StringReplacement[] = [
   // GitHub repo references
   {
     pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    replacement: "github.com/genesisgrid/kilocode",
     description: "GitHub URL",
   },
   {
     pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    replacement: "genesisgrid/kilocode",
     description: "GitHub repo reference",
   },
 
   // Domain replacements (specific first)
   {
     pattern: /app\.opencode\.ai/g,
-    replacement: "app.kilo.ai",
+    replacement: "app.gg.ai",
     description: "App domain",
   },
   {
     pattern: /opencode\.ai(?!\/zen)/g,
-    replacement: "kilo.ai",
+    replacement: "gg.ai",
     description: "Main domain (excluding zen)",
   },
 
@@ -127,7 +127,7 @@ const I18N_REPLACEMENTS: StringReplacement[] = [
   // Environment variables (exclude OPENCODE_API_KEY)
   {
     pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g,
-    replacement: "KILO_$1",
+    replacement: "GGAI_$1",
     description: "Environment variable",
   },
 ]
@@ -142,14 +142,14 @@ const PRESERVE_PATTERNS = [
 ]
 
 /**
- * Check if a line should be preserved (has kilocode_change marker)
+ * Check if a line should be preserved (has ggai_change marker)
  */
 function shouldPreserveLine(line: string): boolean {
-  return line.includes("// kilocode_change")
+  return line.includes("// ggai_change")
 }
 
 /**
- * Apply string replacements to content, preserving kilocode_change lines
+ * Apply string replacements to content, preserving ggai_change lines
  */
 export function transformI18nContent(
   content: string,
@@ -161,7 +161,7 @@ export function transformI18nContent(
   let preservedCount = 0
 
   for (const line of lines) {
-    // Skip lines marked with kilocode_change
+    // Skip lines marked with ggai_change
     if (shouldPreserveLine(line)) {
       transformedLines.push(line)
       preservedCount++

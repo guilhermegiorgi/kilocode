@@ -1,6 +1,6 @@
-# kilocode_change start
+# ggai_change start
 ARG REGISTRY=ghcr.io/kilo-org
-# kilocode_change end
+# ggai_change end
 FROM ${REGISTRY}/build/base:24.04
 
 SHELL ["/bin/bash", "-lc"]

@@ -79,12 +79,12 @@ const TAURI_REPLACEMENTS: TauriReplacement[] = [
   // GitHub references
   {
     pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    replacement: "github.com/genesisgrid/kilocode",
     description: "GitHub URL",
   },
   {
     pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    replacement: "genesisgrid/kilocode",
     description: "GitHub repo",
   },
 
@@ -103,7 +103,7 @@ const TAURI_REPLACEMENTS: TauriReplacement[] = [
   },
   {
     pattern: /name\s*=\s*"opencode_lib"/g,
-    replacement: 'name = "kilo_lib"',
+    replacement: 'name = "ggai_lib"',
     description: "Cargo lib name",
     fileTypes: [".toml"],
   },
@@ -135,7 +135,7 @@ const TAURI_REPLACEMENTS: TauriReplacement[] = [
   },
   {
     pattern: /opencode_lib::run/g,
-    replacement: "kilo_lib::run",
+    replacement: "ggai_lib::run",
     description: "Lib run call",
     fileTypes: [".rs"],
   },
@@ -149,26 +149,26 @@ const TAURI_REPLACEMENTS: TauriReplacement[] = [
   // Domain
   {
     pattern: /opencode\.ai/g,
-    replacement: "kilo.ai",
+    replacement: "gg.ai",
     description: "Domain",
   },
 
   // Environment variables (exclude OPENCODE_API_KEY)
   {
     pattern: /OPENCODE_(?!API_KEY)([A-Z_]+)/g,
-    replacement: "KILO_$1",
+    replacement: "GGAI_$1",
     description: "Env variable",
     fileTypes: [".rs"],
   },
   {
     pattern: /__OPENCODE__/g,
-    replacement: "__KILO__",
+    replacement: "__GGAI__",
     description: "Window global",
     fileTypes: [".rs", ".tsx"],
   },
   {
     pattern: /OPENCODE_PORT/g,
-    replacement: "KILO_PORT",
+    replacement: "GGAI_PORT",
     description: "Port env var",
   },
 ]

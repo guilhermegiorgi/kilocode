@@ -1,5 +1,5 @@
-import type { Event } from "@kilocode/sdk/v2/client"
-import { createSimpleContext } from "@opencode-ai/ui/context"
+import type { Event } from "@ggai/sdk/v2/client"
+import { createSimpleContext } from "@ggai/ui-core/context"
 import { createGlobalEmitter } from "@solid-primitives/event-bus"
 import { type Accessor, createEffect, createMemo, onCleanup } from "solid-js"
 import { useGlobalSDK } from "./global-sdk"

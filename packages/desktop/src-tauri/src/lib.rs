@@ -635,9 +635,9 @@ async fn setup_server_connection(app: AppHandle) -> ServerConnection {
 }
 
 fn get_sidecar_port() -> u32 {
-    option_env!("KILO_PORT")
+    option_env!("GGAI_PORT")
         .map(|s| s.to_string())
-        .or_else(|| std::env::var("KILO_PORT").ok())
+        .or_else(|| std::env::var("GGAI_PORT").ok())
         .and_then(|port_str| port_str.parse().ok())
         .unwrap_or_else(|| {
             TcpListener::bind("127.0.0.1:0")
@@ -667,7 +667,7 @@ fn opencode_db_path() -> Result<PathBuf, &'static str> {
         }
     };
 
-    Ok(data_home.join("kilo").join("kilo.db")) // kilocode_change
+    Ok(data_home.join("kilo").join("kilo.db")) // ggai_change
 }
 
 // Creates a `once` listener for the specified event and returns a future that resolves

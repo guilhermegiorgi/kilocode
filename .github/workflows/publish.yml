@@ -33,7 +33,7 @@ permissions:
 jobs:
   version:
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    if: github.repository == 'Kilo-Org/kilocode'
+    if: github.repository == 'genesisgrid/ggai'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -41,9 +41,9 @@ jobs:
 
       - uses: ./.github/actions/setup-bun
 
-      - name: Install Kilo
+      - name: Install GGAI CLI
         if: inputs.bump || inputs.version
-        run: bun i -g @kilocode/cli
+        run: bun i -g @genesisgrid/cli
 
       - id: version
         run: |
@@ -51,10 +51,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          KILO_BUMP: ${{ inputs.bump }}
-          KILO_VERSION: ${{ inputs.version }}
-          KILO_API_KEY: ${{ secrets.KILO_API_KEY }}
-          KILO_ORG_ID: ${{ secrets.KILO_ORG_ID }}
+          GGAI_BUMP: ${{ inputs.bump }}
+          GGAI_VERSION: ${{ inputs.version }}
+          GGAI_API_KEY: ${{ secrets.GGAI_API_KEY }}
+          GGAI_ORG_ID: ${{ secrets.GGAI_ORG_ID }}
     outputs:
       version: ${{ steps.version.outputs.version }}
       release: ${{ steps.version.outputs.release }}
@@ -63,7 +63,7 @@ jobs:
   build-cli:
     needs: version
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    if: github.repository == 'Kilo-Org/kilocode'
+    if: github.repository == 'genesisgrid/ggai'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -76,14 +76,14 @@ jobs:
         run: |
           ./packages/opencode/script/build.ts
         env:
-          KILO_VERSION: ${{ needs.version.outputs.version }}
-          KILO_RELEASE: ${{ needs.version.outputs.release }}
+          GGAI_VERSION: ${{ needs.version.outputs.version }}
+          GGAI_RELEASE: ${{ needs.version.outputs.release }}
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: kilo-cli
+          name: ggai-cli
           path: packages/opencode/dist
 
     outputs:
@@ -92,7 +92,7 @@ jobs:
   build-vscode:
     needs: build-cli
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    if: github.repository == 'Kilo-Org/kilocode'
+    if: github.repository == 'genesisgrid/ggai'
     steps:
       - uses: actions/checkout@v3
 
@@ -108,21 +108,21 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: kilo-cli
+          name: ggai-cli
           path: packages/opencode/dist
 
       - name: Build VSIX packages
         run: bun script/build.ts
-        working-directory: ./packages/kilo-vscode
+        working-directory: ./packages/ggai-vscode
         env:
           CLI_DIST_DIR: ../../packages/opencode/dist
-          KILO_VERSION: ${{ needs.build-cli.outputs.version }}
+          GGAI_VERSION: ${{ needs.build-cli.outputs.version }}
           GH_REPO: ${{ github.repository }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: kilo-vscode
-          path: packages/kilo-vscode/out
+          name: ggai-vscode
+          path: packages/ggai-vscode/out
 
   # build-tauri:
   #   needs:
@@ -201,7 +201,7 @@ jobs:
   #         cd packages/desktop
   #         bun ./scripts/prepare.ts
   #       env:
-  #         KILO_VERSION: ${{ needs.version.outputs.version }}
+  #         GGAI_VERSION: ${{ needs.version.outputs.version }}
   #         GITHUB_TOKEN: ${{ steps.committer.outputs.token }}
   #         RUST_TARGET: ${{ matrix.settings.target }}
   #         GH_TOKEN: ${{ github.token }}
@@ -278,19 +278,19 @@ jobs:
         uses: ./.github/actions/setup-git-committer
         with:
           # kilocode_change start
-          kilo-maintainer-app-id: ${{ secrets.KILO_MAINTAINER_APP_ID }}
-          kilo-maintainer-app-secret: ${{ secrets.KILO_MAINTAINER_APP_SECRET }}
+          ggai-maintainer-app-id: ${{ secrets.GGAI_MAINTAINER_APP_ID }}
+          ggai-maintainer-app-secret: ${{ secrets.GGAI_MAINTAINER_APP_SECRET }}
           # kilocode_change end
 
       - uses: actions/download-artifact@v4
         with:
-          name: kilo-cli
+          name: ggai-cli
           path: packages/opencode/dist
 
       - uses: actions/download-artifact@v4
         with:
-          name: kilo-vscode
-          path: packages/kilo-vscode/out
+          name: ggai-vscode
+          path: packages/ggai-vscode/out
 
       - name: Cache apt packages (AUR)
         uses: actions/cache@v4
@@ -307,14 +307,14 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.AUR_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          git config --global user.email "kilo-maintainer[bot]@users.noreply.github.com"
-          git config --global user.name "kilo-maintainer[bot]"
+          git config --global user.email "ggai-maintainer[bot]@users.noreply.github.com"
+          git config --global user.name "ggai-maintainer[bot]"
           ssh-keyscan -H aur.archlinux.org >> ~/.ssh/known_hosts || true
 
       - run: ./script/publish.ts
         env:
-          KILO_VERSION: ${{ needs.version.outputs.version }}
-          KILO_RELEASE: ${{ needs.version.outputs.release }}
+          GGAI_VERSION: ${{ needs.version.outputs.version }}
+          GGAI_RELEASE: ${{ needs.version.outputs.release }}
           GH_REPO: ${{ github.repository }}
           AUR_KEY: ${{ secrets.AUR_KEY }}
           GITHUB_TOKEN: ${{ steps.committer.outputs.token }}

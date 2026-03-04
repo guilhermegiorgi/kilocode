@@ -11,24 +11,24 @@ import PROMPT_CODEX from "./prompt/codex_header.txt"
 import PROMPT_TRINITY from "./prompt/trinity.txt"
 import type { Provider } from "@/provider/provider"
 
-// kilocode_change start
-import SOUL from "../kilocode/soul.txt"
-import { editorContextEnvLines, type EditorContext } from "../kilocode/editor-context"
-// kilocode_change end
+// ggai_change start
+import SOUL from "../ggai/soul.txt"
+import { editorContextEnvLines, type EditorContext } from "../ggai/editor-context"
+// ggai_change end
 
 export namespace SystemPrompt {
   export function instructions() {
     return PROMPT_CODEX.trim()
   }
 
-  // kilocode_change start
+  // ggai_change start
   export function soul() {
     return SOUL.trim()
   }
-  // kilocode_change end
+  // ggai_change end
 
   export function provider(model: Provider.Model) {
-    // kilocode_change start
+    // ggai_change start
     switch (model.prompt) {
       case "anthropic":
         return [PROMPT_ANTHROPIC]
@@ -43,7 +43,7 @@ export namespace SystemPrompt {
       case "trinity":
         return [PROMPT_TRINITY]
     }
-    // kilocode_change end
+    // ggai_change end
 
     if (model.api.id.includes("gpt-5")) return [PROMPT_CODEX]
     if (model.api.id.includes("gpt-") || model.api.id.includes("o1") || model.api.id.includes("o3"))
@@ -55,9 +55,9 @@ export namespace SystemPrompt {
     return [PROMPT_ANTHROPIC_WITHOUT_TODO]
   }
 
-  // kilocode_change start
+  // ggai_change start
   export async function environment(model: Provider.Model, editorContext?: EditorContext) {
-    // kilocode_change end
+    // ggai_change end
     const project = Instance.project
     return [
       [
@@ -67,7 +67,7 @@ export namespace SystemPrompt {
         `  Working directory: ${Instance.directory}`,
         `  Is directory a git repo: ${project.vcs === "git" ? "yes" : "no"}`,
         `  Platform: ${process.platform}`,
-        ...editorContextEnvLines(editorContext), // kilocode_change
+        ...editorContextEnvLines(editorContext), // ggai_change
         `</env>`,
         `<directories>`,
         `  ${

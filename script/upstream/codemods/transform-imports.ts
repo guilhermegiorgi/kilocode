@@ -5,8 +5,8 @@
  * Transforms imports from opencode packages to kilo packages:
  * - opencode-ai -> @kilocode/cli
  * - @opencode-ai/cli -> @kilocode/cli
- * - @opencode-ai/sdk -> @kilocode/sdk
- * - @opencode-ai/plugin -> @kilocode/plugin
+ * - @opencode-ai/sdk -> @ggai/sdk
+ * - @opencode-ai/plugin -> @ggai/plugin
  *
  * Usage with jscodeshift:
  *   npx jscodeshift -t script/upstream/codemods/transform-imports.ts src/
@@ -23,16 +23,16 @@ import { defaultConfig } from "../utils/config"
 const IMPORT_MAPPINGS: Record<string, string> = {
   "opencode-ai": "@kilocode/cli",
   "@opencode-ai/cli": "@kilocode/cli",
-  "@opencode-ai/sdk": "@kilocode/sdk",
-  "@opencode-ai/plugin": "@kilocode/plugin",
+  "@opencode-ai/sdk": "@ggai/sdk",
+  "@opencode-ai/plugin": "@ggai/plugin",
 }
 
 /**
  * Get the transformed module specifier, handling subpaths.
  * Examples:
- *   "@opencode-ai/sdk" -> "@kilocode/sdk"
- *   "@opencode-ai/sdk/v2" -> "@kilocode/sdk/v2"
- *   "@opencode-ai/sdk/v2/client" -> "@kilocode/sdk/v2/client"
+ *   "@opencode-ai/sdk" -> "@ggai/sdk"
+ *   "@opencode-ai/sdk/v2" -> "@ggai/sdk/v2"
+ *   "@opencode-ai/sdk/v2/client" -> "@ggai/sdk/v2/client"
  */
 function getTransformedModule(specifier: string): string | undefined {
   // Check exact match first

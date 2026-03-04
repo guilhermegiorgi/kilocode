@@ -13,7 +13,7 @@ import { LSP } from "../lsp"
 import { Filesystem } from "../util/filesystem"
 import DESCRIPTION from "./apply_patch.txt"
 import { File } from "../file"
-import { filterDiagnostics } from "./diagnostics" // kilocode_change
+import { filterDiagnostics } from "./diagnostics" // ggai_change
 
 const PatchParams = z.object({
   patchText: z.string().describe("The full patch text that describes all changes to be made"),
@@ -269,18 +269,18 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
       }
     }
 
-    // kilocode_change start
+    // ggai_change start
     const changedPaths = fileChanges
       .filter((c) => c.type !== "delete")
       .map((c) => Filesystem.normalizePath(c.movePath ?? c.filePath))
-    // kilocode_change end
+    // ggai_change end
 
     return {
       title: output,
       metadata: {
         diff: totalDiff,
         files,
-        diagnostics: filterDiagnostics(diagnostics, changedPaths), // kilocode_change
+        diagnostics: filterDiagnostics(diagnostics, changedPaths), // ggai_change
       },
       output,
     }

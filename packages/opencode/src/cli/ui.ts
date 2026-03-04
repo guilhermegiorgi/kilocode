@@ -1,6 +1,6 @@
 import z from "zod"
 import { EOL } from "os"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { logo as glyphs } from "./logo"
 
 export namespace UI {
@@ -40,7 +40,7 @@ export namespace UI {
     blank = true
   }
 
-  // kilocode_change start
+  // ggai_change start
   export function logo(pad?: string) {
     const result: string[] = []
     const reset = "\x1b[0m"
@@ -78,17 +78,14 @@ export namespace UI {
       }
       return parts.join("")
     }
-    glyphs.left.forEach((row, index) => {
+    glyphs.right.forEach((row, index) => {
       if (pad) result.push(pad)
-      result.push(draw(row, left.fg, left.shadow, left.bg))
-      result.push(gap)
-      const other = glyphs.right[index] ?? ""
-      result.push(draw(other, right.fg, right.shadow, right.bg))
+      result.push(draw(row, right.fg, right.shadow, right.bg))
       result.push(EOL)
     })
     return result.join("").trimEnd()
   }
-  // kilocode_change end
+  // ggai_change end
 
   export async function input(prompt: string): Promise<string> {
     const readline = require("readline")

@@ -3,21 +3,21 @@ import { useGlobalSync } from "@/context/global-sync"
 import { useLanguage } from "@/context/language"
 import { useLayout, type LocalProject, getAvatarColors } from "@/context/layout"
 import { useNotification } from "@/context/notification"
-import { base64Encode } from "@opencode-ai/util/encode"
-import { Avatar } from "@opencode-ai/ui/avatar"
-import { DiffChanges } from "@opencode-ai/ui/diff-changes"
-import { HoverCard } from "@opencode-ai/ui/hover-card"
-import { Icon } from "@opencode-ai/ui/icon"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import { MessageNav } from "@opencode-ai/ui/message-nav"
-import { Spinner } from "@opencode-ai/ui/spinner"
-import { Tooltip } from "@opencode-ai/ui/tooltip"
-import { getFilename } from "@opencode-ai/util/path"
-import { type Message, type Session, type TextPart, type UserMessage } from "@kilocode/sdk/v2/client"
+import { base64Encode } from "@ggai/util/encode"
+import { Avatar } from "@ggai/ui-core/avatar"
+import { DiffChanges } from "@ggai/ui-core/diff-changes"
+import { HoverCard } from "@ggai/ui-core/hover-card"
+import { Icon } from "@ggai/ui-core/icon"
+import { IconButton } from "@ggai/ui-core/icon-button"
+import { MessageNav } from "@ggai/ui-core/message-nav"
+import { Spinner } from "@ggai/ui-core/spinner"
+import { Tooltip } from "@ggai/ui-core/tooltip"
+import { getFilename } from "@ggai/util/path"
+import { type Message, type Session, type TextPart, type UserMessage } from "@ggai/sdk/v2/client"
 import { For, Match, Show, Switch, createMemo, onCleanup, type Accessor, type JSX } from "solid-js"
 import { agentColor } from "@/utils/agent"
 
-const KILO_PROJECT_ID = "4b0ea68d7af9a6031a7ffda7ad66e0cb83315750"
+const GGAI_PROJECT_ID = "4b0ea68d7af9a6031a7ffda7ad66e0cb83315750"
 
 export const ProjectIcon = (props: { project: LocalProject; class?: string; notify?: boolean }): JSX.Element => {
   const notification = useNotification()
@@ -32,7 +32,7 @@ export const ProjectIcon = (props: { project: LocalProject; class?: string; noti
       <div class="size-full rounded overflow-clip">
         <Avatar
           fallback={name()}
-          src={props.project.id === KILO_PROJECT_ID ? "https://kilo.ai/favicon.svg" : props.project.icon?.override}
+          src={props.project.id === GGAI_PROJECT_ID ? "https://gg.ai/favicon.svg" : props.project.icon?.override}
           {...getAvatarColors(props.project.icon?.color)}
           class="size-full rounded"
           classList={{ "badge-mask": unseenCount() > 0 && props.notify }}

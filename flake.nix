@@ -21,15 +21,15 @@
       devShells = forEachSystem (pkgs: {
         default =
           let
-            kilo-dev = pkgs.writeShellScriptBin "kilo-dev" ''
+            ggai-dev = pkgs.writeShellScriptBin "ggai-dev" ''
               cd "$KILO_ROOT"
               exec ${pkgs.bun}/bin/bun dev "$@"
             '';
 
-            kilo-install-bin = pkgs.writeShellScriptBin "kilo-install" ''
+            ggai-install-bin = pkgs.writeShellScriptBin "ggai-install" ''
               set -euo pipefail
 
-              CACHE_DIR="$HOME/.cache/kilo-nix"
+              CACHE_DIR="$HOME/.cache/ggai-nix"
               VERSION="''${1:-latest}"
 
               # Platform detection
@@ -120,28 +120,28 @@
               fi
 
               # Install the binary
-              KILO_BIN="$CACHE_DIR/kilo"
+              KILO_BIN="$CACHE_DIR/ggai"
               mv "$tmp_dir/kilo" "$KILO_BIN"
               chmod +x "$KILO_BIN"
 
               # Get the installed version
               installed_version=$("$KILO_BIN" --version 2>/dev/null || echo "unknown")
-              echo "Successfully installed kilo $installed_version to $KILO_BIN" >&2
+              echo "Successfully installed ggai $installed_version to $KILO_BIN" >&2
             '';
 
-            kilo-bin = pkgs.writeShellScriptBin "kilo" ''
+            kilo-bin = pkgs.writeShellScriptBin "ggai" ''
               set -euo pipefail
 
-              CACHE_DIR="$HOME/.cache/kilo-nix"
-              KILO_BIN="$CACHE_DIR/kilo"
+              CACHE_DIR="$HOME/.cache/ggai-nix"
+              KILO_BIN="$CACHE_DIR/ggai"
 
               if [ ! -f "$KILO_BIN" ]; then
-                echo "Error: kilo is not installed in the cache." >&2
-                echo "Please run 'kilo-install' first to download and install kilo." >&2
+                echo "Error: ggai is not installed in the cache." >&2
+                echo "Please run 'ggai-install' first to download and install ggai." >&2
                 echo "" >&2
                 echo "Examples:" >&2
-                echo "  kilo-install          # Install latest version" >&2
-                echo "  kilo-install 1.0.180  # Install specific version" >&2
+                echo "  ggai-install          # Install latest version" >&2
+                echo "  ggai-install 1.0.180  # Install specific version" >&2
                 exit 1
               fi
 
@@ -164,8 +164,8 @@
               gzip
               patchelf
               ripgrep
-              kilo-dev
-              kilo-install-bin
+              ggai-dev
+              ggai-install-bin
               kilo-bin
             ];
             shellHook = ''

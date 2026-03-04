@@ -60,9 +60,9 @@ impl MainWindow {
         .maximized(true)
         .initialization_script(format!(
             r#"
-            window.__KILO__ ??= {{}};
-            window.__KILO__.updaterEnabled = {UPDATER_ENABLED};
-            window.__KILO__.wsl = {wsl_enabled};
+            window.__GGAI__ ??= {{}};
+            window.__GGAI__.updaterEnabled = {UPDATER_ENABLED};
+            window.__GGAI__.wsl = {wsl_enabled};
           "#
         ));
 

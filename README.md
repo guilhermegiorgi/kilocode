@@ -1,15 +1,15 @@
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=kilocode.Kilo-Code"><img src="https://img.shields.io/badge/VS_Code_Marketplace-007ACC?style=flat&logo=visualstudiocode&logoColor=white" alt="VS Code Marketplace"></a>
-  <a href="https://x.com/kilocode"><img src="https://img.shields.io/badge/kilocode-000000?style=flat&logo=x&logoColor=white" alt="X (Twitter)"></a>
-  <a href="https://blog.kilo.ai"><img src="https://img.shields.io/badge/Blog-555?style=flat&logo=substack&logoColor=white" alt="Substack Blog"></a>
-  <a href="https://kilo.ai/discord"><img src="https://img.shields.io/badge/Join%20Discord-5865F2?style=flat&logo=discord&logoColor=white" alt="Discord"></a>
-  <a href="https://www.reddit.com/r/kilocode/"><img src="https://img.shields.io/badge/Join%20r%2Fkilocode-D84315?style=flat&logo=reddit&logoColor=white" alt="Reddit"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=genesisgrid.ggai-code"><img src="https://img.shields.io/badge/VS_Code_Marketplace-007ACC?style=flat&logo=visualstudiocode&logoColor=white" alt="VS Code Marketplace"></a>
+  <a href="https://x.com/genesisgridai"><img src="https://img.shields.io/badge/genesisgridai-000000?style=flat&logo=x&logoColor=white" alt="X (Twitter)"></a>
+  <a href="https://blog.genesisgrid.ai"><img src="https://img.shields.io/badge/Blog-555?style=flat&logo=substack&logoColor=white" alt="Substack Blog"></a>
+  <a href="https://genesisgrid.ai/discord"><img src="https://img.shields.io/badge/Join%20Discord-5865F2?style=flat&logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://www.reddit.com/r/genesisgridai/"><img src="https://img.shields.io/badge/Join%20r%2Fgenesisgridai-D84315?style=flat&logo=reddit&logoColor=white" alt="Reddit"></a>
 </p>
 
-# 🚀 Kilo
+# 🚀 Genesis Grid AI Labs
 
-> Kilo is the all-in-one agentic engineering platform. Build, ship, and iterate faster with the most popular open source coding agent.
-> #1 on OpenRouter. 1.5M+ Kilo Coders. 25T+ tokens processed
+> Genesis Grid AI Labs is the all-in-one agentic engineering platform. Build, ship, and iterate faster with the most popular open source coding agent.
+> #1 on OpenRouter. 1.5M+ GG.AI Coders. 25T+ tokens processed
 
 - ✨ Generate code from natural language
 - ✅ Checks its own work
@@ -22,24 +22,24 @@
 
 ## Quick Links
 
-- [VS Code Marketplace](https://kilo.ai/vscode-marketplace?utm_source=Readme) (download)
-- Install CLI: `npm install -g @kilocode/cli`
-- [Official Kilo.ai Home page](https://kilo.ai) (learn more)
+- [VS Code Marketplace](https://genesisgrid.ai/vscode-marketplace?utm_source=Readme) (download)
+- Install CLI: `npm install -g @ggai/cli`
+- [Official GenesisGrid.ai Home page](https://genesisgrid.ai) (learn more)
 
 ## Key Features
 
-- **Code Generation:** Kilo can generate code using natural language.
+- **Code Generation:** GG.AI can generate code using natural language.
 - **Inline Autocomplete:** Get intelligent code completions as you type, powered by AI.
-- **Task Automation:** Kilo can automate repetitive coding tasks to save time.
-- **Automated Refactoring:** Kilo can refactor and improve existing code efficiently.
-- **MCP Server Marketplace**: Kilo can easily find, and use MCP servers to extend the agent capabilities.
+- **Task Automation:** GG.AI can automate repetitive coding tasks to save time.
+- **Automated Refactoring:** GG.AI can refactor and improve existing code efficiently.
+- **MCP Server Marketplace**: GG.AI can easily find, and use MCP servers to extend the agent capabilities.
 - **Multi Mode**: Plan with Architect, Code with Coder, and Debug with Debugger, and make your own custom modes.
 
 ## Get Started in Visual Studio Code
 
-1. Install the Kilo Code extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=kilocode.Kilo-Code).
+1. Install the GG.AI Code extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=genesisgrid.ggai-code).
 2. Create your account to access 500+ cutting-edge AI models including Gemini 3 Pro, Claude 4.5 Sonnet & Opus, and GPT-5 – with transparent pricing that matches provider rates exactly.
-3. Start coding with AI that adapts to your workflow. Watch our quick-start guide to see Kilo in action:
+3. Start coding with AI that adapts to your workflow. Watch our quick-start guide to see GG.AI in action:
 
 [![Watch the video](https://img.youtube.com/vi/pqGfYXgrhig/maxresdefault.jpg)](https://youtu.be/pqGfYXgrhig)
 
@@ -47,15 +47,37 @@
 
 ```bash
 # npm
-npm install -g @kilocode/cli
+npm install -g @ggai/cli
 
 # Or run directly with npx
-npx @kilocode/cli
+npx @ggai/cli
+```
+
+Then run `ggai` in any project directory to start.
+
+<!-- ggai_change start -->
+
+### npm Install Note: Hidden `.ggai` File
+
+On some systems and npm versions, installing `@ggai/cli` can create a hidden `.ggai` file near the installed `ggai` command (for example in a global npm bin directory). This file is an npm-generated launcher helper, not project data.
+
+- Why it exists: npm may create helper artifacts while wiring CLI executables.
+- Size caveat: size can vary by platform, npm version, and install mode (symlink vs copied launcher), so a strict fixed size is not guaranteed.
+- Safety: it is safe to leave in place. Do not edit it manually. Use your package manager's uninstall (`npm uninstall -g @ggai/cli`) to remove install artifacts cleanly.
+<!-- ggai_change end -->
+
+### Autonomous Mode (CI/CD)
+
+Use the `--auto` flag with `ggai run` to enable fully autonomous operation without user interaction. This is ideal for CI/CD pipelines and automated workflows:
+
+```bash
+ggai run --auto "run tests and fix any failures"
 ```
 
 Then run `kilo` in any project directory to start.
 
-<!-- kilocode_change start -->
+<!-- ggai_change start -->
+
 ### npm Install Note: Hidden `.kilo` File
 
 On some systems and npm versions, installing `@kilocode/cli` can create a hidden `.kilo` file near the installed `kilo` command (for example in a global npm bin directory). This file is an npm-generated launcher helper, not project data.
@@ -63,7 +85,7 @@ On some systems and npm versions, installing `@kilocode/cli` can create a hidden
 - Why it exists: npm may create helper artifacts while wiring CLI executables.
 - Size caveat: size can vary by platform, npm version, and install mode (symlink vs copied launcher), so a strict fixed size is not guaranteed.
 - Safety: it is safe to leave in place. Do not edit it manually. Use your package manager's uninstall (`npm uninstall -g @kilocode/cli`) to remove install artifacts cleanly.
-<!-- kilocode_change end -->
+<!-- ggai_change end -->
 
 ### Autonomous Mode (CI/CD)
 
@@ -91,6 +113,6 @@ Our community is built on respect, inclusivity, and collaboration. Please review
 This project is licensed under the MIT License.
 You’re free to use, modify, and distribute this code, including for commercial purposes as long as you include proper attribution and license notices. See [License](/LICENSE).
 
-### Where did Kilo CLI come from?
+### Where did GG.AI CLI come from?
 
-Kilo CLI is a fork of [OpenCode](https://github.com/anomalyco/opencode), enhanced to work within the Kilo agentic engineering platform.
+GG.AI CLI is a fork of [OpenCode](https://github.com/anomalyco/opencode), enhanced to work within the Genesis Grid AI Labs agentic engineering platform.

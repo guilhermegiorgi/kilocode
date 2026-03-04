@@ -1,5 +1,5 @@
 import type { Argv } from "yargs"
-import type { Session as SDKSession, Message, Part } from "@kilocode/sdk/v2"
+import type { Session as SDKSession, Message, Part } from "@ggai/sdk/v2"
 import { Session } from "../../session"
 import { cmd } from "./cmd"
 import { bootstrap } from "../bootstrap"
@@ -67,15 +67,15 @@ export function transformShareData(shareData: ShareData[]): {
   }
 }
 
-// kilocode_change start
+// ggai_change start
 export function ingestBootstrapWarning(sessionId: string, error: unknown) {
   const details = error instanceof Error ? error.message : String(error)
   return `Warning: imported session ${sessionId} locally, but ingest bootstrap failed: ${details}`
 }
 
 async function ingestBootstrap(sessionId: string) {
-  const { KiloSessions } = await import("../../kilo-sessions/kilo-sessions")
-  return KiloSessions.bootstrap(sessionId)
+  const { GGAISessions } = await import("../../ggai-sessions/ggai-sessions")
+  return GGAISessions.bootstrap(sessionId)
 }
 
 export async function bootstrapImportedSessionIngest(
@@ -103,7 +103,7 @@ export async function bootstrapImportedSessionIngest(
       warn(ingestBootstrapWarning(sessionId, error))
     })
 }
-// kilocode_change end
+// ggai_change end
 
 export const ImportCommand = cmd({
   command: "import <file>",
@@ -119,12 +119,12 @@ export const ImportCommand = cmd({
     await bootstrap(process.cwd(), async () => {
       let exportData:
         | {
-            info: Session.Info
-            messages: Array<{
-              info: Message
-              parts: Part[]
-            }>
-          }
+          info: Session.Info
+          messages: Array<{
+            info: Message
+            parts: Part[]
+          }>
+        }
         | undefined
 
       const isUrl = args.file.startsWith("http://") || args.file.startsWith("https://")
@@ -206,9 +206,9 @@ export const ImportCommand = cmd({
         }
       }
 
-      // kilocode_change start
+      // ggai_change start
       await bootstrapImportedSessionIngest(exportData.info.id)
-      // kilocode_change end
+      // ggai_change end
 
       process.stdout.write(`Imported session: ${exportData.info.id}`)
       process.stdout.write(EOL)

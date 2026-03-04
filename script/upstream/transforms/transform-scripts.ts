@@ -3,7 +3,7 @@
  * Transform script files with GitHub API references
  *
  * This script handles script files that contain GitHub API references
- * by transforming them from anomalyco/opencode to Kilo-Org/kilocode.
+ * by transforming them from anomalyco/opencode to genesisgrid/kilocode.
  */
 
 import { $ } from "bun"
@@ -33,38 +33,38 @@ const SCRIPT_REPLACEMENTS: ScriptReplacement[] = [
   // GitHub API URLs
   {
     pattern: /api\.github\.com\/repos\/anomalyco\/opencode/g,
-    replacement: "api.github.com/repos/Kilo-Org/kilocode",
+    replacement: "api.github.com/repos/genesisgrid/kilocode",
     description: "GitHub API URL",
   },
   {
     pattern: /\/repos\/anomalyco\/opencode/g,
-    replacement: "/repos/Kilo-Org/kilocode",
+    replacement: "/repos/genesisgrid/kilocode",
     description: "GitHub repos path",
   },
 
   // gh CLI commands
   {
     pattern: /gh api "\/repos\/anomalyco\/opencode/g,
-    replacement: 'gh api "/repos/Kilo-Org/kilocode',
+    replacement: 'gh api "/repos/genesisgrid/kilocode',
     description: "gh api command",
   },
 
   // Direct GitHub references
   {
     pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    replacement: "github.com/genesisgrid/kilocode",
     description: "GitHub URL",
   },
   {
     pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    replacement: "genesisgrid/kilocode",
     description: "GitHub repo reference",
   },
 
   // Environment variables (exclude OPENCODE_API_KEY)
   {
     pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g,
-    replacement: "KILO_$1",
+    replacement: "GGAI_$1",
     description: "Environment variable",
   },
 

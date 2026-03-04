@@ -34,7 +34,7 @@ import { Command } from "../command"
 import { $, fileURLToPath, pathToFileURL } from "bun"
 import { ConfigMarkdown } from "../config/markdown"
 import { SessionSummary } from "./summary"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@ggai/util/error"
 import { fn } from "@/util/fn"
 import { SessionProcessor } from "./processor"
 import { TaskTool } from "@/tool/task"
@@ -45,7 +45,7 @@ import { LLM } from "./llm"
 import { iife } from "@/util/iife"
 import { Shell } from "@/shell/shell"
 import { Truncate } from "@/tool/truncation"
-import { PlanFollowup } from "@/kilocode/plan-followup" // kilocode_change
+import { PlanFollowup } from "@/ggai/plan-followup" // ggai_change
 
 // @ts-ignore
 globalThis.AI_SDK_LOG_WARNINGS = false
@@ -61,10 +61,10 @@ IMPORTANT:
 const STRUCTURED_OUTPUT_SYSTEM_PROMPT = `IMPORTANT: The user has requested structured output. You MUST use the StructuredOutput tool to provide your final response. Do NOT respond with plain text - you MUST call the StructuredOutput tool with your answer formatted according to the schema.`
 
 export namespace SessionPrompt {
-  // kilocode_change start - share follow-up trigger logic with tests
+  // ggai_change start - share follow-up trigger logic with tests
   export function shouldAskPlanFollowup(input: { messages: MessageV2.WithParts[]; abort: AbortSignal }) {
     if (input.abort.aborted) return false
-    if (!["cli", "vscode"].includes(Flag.KILO_CLIENT)) return false
+    if (!["cli", "vscode"].includes(Flag.GGAI_CLIENT)) return false
     const lastUserIdx = input.messages.findLastIndex((m) => m.info.role === "user")
     return input.messages
       .slice(lastUserIdx + 1)
@@ -72,7 +72,7 @@ export namespace SessionPrompt {
         msg.parts.some((p) => p.type === "tool" && p.tool === "plan_exit" && p.state.status === "completed"),
       )
   }
-  // kilocode_change end
+  // ggai_change end
 
   const log = Log.create({ service: "session.prompt" })
 
@@ -122,7 +122,7 @@ export namespace SessionPrompt {
     format: MessageV2.Format.optional(),
     system: z.string().optional(),
     variant: z.string().optional(),
-    // kilocode_change start
+    // ggai_change start
     editorContext: z
       .object({
         visibleFiles: z.array(z.string()).optional(),
@@ -132,7 +132,7 @@ export namespace SessionPrompt {
         timezone: z.string().optional(),
       })
       .optional(),
-    // kilocode_change end
+    // ggai_change end
     parts: z.array(
       z.discriminatedUnion("type", [
         MessageV2.TextPart.omit({
@@ -307,7 +307,7 @@ export namespace SessionPrompt {
       })
     }
 
-    // kilocode_change start
+    // ggai_change start
     void Bus.publish(Session.Event.TurnOpen, { sessionID })
     let closeReason: Session.CloseReason = "completed"
     let finished = false
@@ -316,7 +316,7 @@ export namespace SessionPrompt {
       if (!finished) closeReason = abort.aborted ? "interrupted" : "error"
       await Bus.publish(Session.Event.TurnClose, { sessionID, reason: closeReason })
     })
-    // kilocode_change end
+    // ggai_change end
 
     // Structured output state
     // Note: On session resumption, state is reset but outputFormat is preserved
@@ -328,12 +328,12 @@ export namespace SessionPrompt {
     while (true) {
       SessionStatus.set(sessionID, { type: "busy" })
       log.info("loop", { step, sessionID })
-      // kilocode_change start
+      // ggai_change start
       if (abort.aborted) {
         closeReason = "interrupted"
         break
       }
-      // kilocode_change end
+      // ggai_change end
       let msgs = await MessageV2.filterCompacted(MessageV2.stream(sessionID))
 
       let lastUser: MessageV2.User | undefined
@@ -359,12 +359,12 @@ export namespace SessionPrompt {
         !["tool-calls", "unknown"].includes(lastAssistant.finish) &&
         lastUser.id < lastAssistant.id
       ) {
-        // kilocode_change start - ask follow-up when plan_exit tool was called
+        // ggai_change start - ask follow-up when plan_exit tool was called
         if (shouldAskPlanFollowup({ messages: msgs, abort })) {
           const action = await PlanFollowup.ask({ sessionID, messages: msgs, abort })
           if (action === "continue") continue
         }
-        // kilocode_change end
+        // ggai_change end
         log.info("exiting loop", { sessionID })
         break
       }
@@ -696,7 +696,7 @@ export namespace SessionPrompt {
       const system = [
         ...(await SystemPrompt.environment(model, lastUser.editorContext)),
         ...(await InstructionPrompt.system()),
-      ] // kilocode_change
+      ] // ggai_change
       const format = lastUser.format ?? { type: "text" }
       if (format.type === "json_schema") {
         system.push(STRUCTURED_OUTPUT_SYSTEM_PROMPT)
@@ -748,13 +748,13 @@ export namespace SessionPrompt {
         }
       }
 
-      // kilocode_change start
+      // ggai_change start
       if (result === "stop") {
         if (abort.aborted || processor.message.error?.name === "MessageAbortedError") closeReason = "interrupted"
         else if (processor.message.error) closeReason = "error"
         break
       }
-      // kilocode_change end
+      // ggai_change end
       if (result === "compact") {
         await SessionCompaction.create({
           sessionID,
@@ -766,7 +766,7 @@ export namespace SessionPrompt {
       continue
     }
     SessionCompaction.prune({ sessionID })
-    // kilocode_change start
+    // ggai_change start
     finished = true
     // Return the stored interrupted assistant turn before surfacing AbortError.
     for await (const item of MessageV2.stream(sessionID)) {
@@ -778,7 +778,7 @@ export namespace SessionPrompt {
       return item
     }
     if (abort.aborted) abort.throwIfAborted()
-    // kilocode_change end
+    // ggai_change end
     throw new Error("Impossible")
   })
 
@@ -1033,7 +1033,7 @@ export namespace SessionPrompt {
       system: input.system,
       format: input.format,
       variant,
-      editorContext: input.editorContext, // kilocode_change
+      editorContext: input.editorContext, // ggai_change
     }
     using _ = defer(() => InstructionPrompt.clear(info.id))
 
@@ -1383,7 +1383,7 @@ export namespace SessionPrompt {
     if (!userMessage) return input.messages
 
     // Original logic when experimental plan mode is disabled
-    if (!Flag.KILO_EXPERIMENTAL_PLAN_MODE) {
+    if (!Flag.GGAI_EXPERIMENTAL_PLAN_MODE) {
       if (input.agent.name === "plan") {
         userMessage.parts.push({
           id: Identifier.ascending("part"),
@@ -1395,9 +1395,9 @@ export namespace SessionPrompt {
         })
       }
       const wasPlan = input.messages.some((msg) => msg.info.role === "assistant" && msg.info.agent === "plan")
-      // kilocode_change start - renamed from "build" to "code"
+      // ggai_change start - renamed from "build" to "code"
       if (wasPlan && input.agent.name === "code") {
-        // kilocode_change end
+        // ggai_change end
         userMessage.parts.push({
           id: Identifier.ascending("part"),
           messageID: userMessage.info.id,

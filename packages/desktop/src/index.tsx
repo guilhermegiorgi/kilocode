@@ -8,8 +8,8 @@ import {
   PlatformProvider,
   ServerConnection,
   useCommand,
-} from "@opencode-ai/app"
-import { Splash } from "@opencode-ai/ui/logo"
+} from "@ggai/app"
+import { Splash } from "@ggai/ui-core/logo"
 import type { AsyncStorage } from "@solid-primitives/storage"
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { readImage } from "@tauri-apps/plugin-clipboard-manager"
@@ -47,9 +47,9 @@ const deepLinkEvent = "opencode:deep-link"
 
 const emitDeepLinks = (urls: string[]) => {
   if (urls.length === 0) return
-  window.__KILO__ ??= {}
-  const pending = window.__KILO__.deepLinks ?? []
-  window.__KILO__.deepLinks = [...pending, ...urls]
+  window.__GGAI__ ??= {}
+  const pending = window.__GGAI__.deepLinks ?? []
+  window.__GGAI__.deepLinks = [...pending, ...urls]
   window.dispatchEvent(new CustomEvent(deepLinkEvent, { detail: { urls } }))
 }
 
@@ -67,12 +67,12 @@ const createPlatform = (): Platform => {
   })()
 
   const wslHome = async () => {
-    if (os !== "windows" || !window.__KILO__?.wsl) return undefined
+    if (os !== "windows" || !window.__GGAI__?.wsl) return undefined
     return commands.wslPath("~", "windows").catch(() => undefined)
   }
 
   const handleWslPicker = async <T extends string | string[]>(result: T | null): Promise<T | null> => {
-    if (!result || !window.__KILO__?.wsl) return result
+    if (!result || !window.__GGAI__?.wsl) return result
     if (Array.isArray(result)) {
       return Promise.all(result.map((path) => commands.wslPath(path, "linux").catch(() => path))) as any
     }
@@ -120,7 +120,7 @@ const createPlatform = (): Platform => {
       if (os === "windows") {
         const resolvedApp = (app && (await commands.resolveAppPath(app))) || app
         const resolvedPath = await (async () => {
-          if (window.__KILO__?.wsl) {
+          if (window.__GGAI__?.wsl) {
             const converted = await commands.wslPath(path, "windows").catch(() => null)
             if (converted) return converted
           }
@@ -355,7 +355,7 @@ const createPlatform = (): Platform => {
     getWslEnabled: async () => {
       const next = await commands.getWslConfig().catch(() => null)
       if (next) return next.enabled
-      return window.__KILO__!.wsl ?? false
+      return window.__GGAI__!.wsl ?? false
     },
 
     setWslEnabled: async (enabled) => {

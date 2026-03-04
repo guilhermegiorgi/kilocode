@@ -1,5 +1,5 @@
 {
-  "name": "@opencode-ai/ui",
+  "name": "@ggai/ui-core",
   "version": "7.0.37",
   "type": "module",
   "license": "MIT",
@@ -98,8 +98,8 @@
   },
   "dependencies": {
     "@kobalte/core": "catalog:",
-    "@kilocode/sdk": "workspace:*",
-    "@opencode-ai/util": "workspace:*",
+    "@ggai/sdk": "workspace:*",
+    "@ggai/util": "workspace:*",
     "@pierre/diffs": "catalog:",
     "@shikijs/transformers": "3.9.2",
     "@solid-primitives/bounds": "0.1.3",

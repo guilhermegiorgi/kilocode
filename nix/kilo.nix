@@ -34,9 +34,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-  env.KILO_DISABLE_MODELS_FETCH = true;
-  env.KILO_VERSION = finalAttrs.version;
-  env.KILO_CHANNEL = "local";
+  env.GGAI_DISABLE_MODELS_FETCH = true;
+  env.GGAI_VERSION = finalAttrs.version;
+  env.GGAI_CHANNEL = "local";
 
   buildPhase = ''
     runHook preBuild
@@ -51,10 +51,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 dist/@kilocode/cli-*/bin/kilo $out/bin/kilo
-    install -Dm644 schema.json $out/share/kilo/schema.json
+    install -Dm755 dist/@kilocode/cli-*/bin/ggai $out/bin/ggai
+    install -Dm644 schema.json $out/share/ggai/schema.json
 
-    wrapProgram $out/bin/kilo \
+    wrapProgram $out/bin/ggai \
       --prefix PATH : ${
         lib.makeBinPath (
           [
@@ -70,9 +70,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
     # trick yargs into also generating zsh completions
-    installShellCompletion --cmd kilo \
-      --bash <($out/bin/kilo completion) \
-      --zsh <(SHELL=/bin/zsh $out/bin/kilo completion)
+    installShellCompletion --cmd ggai \
+      --bash <($out/bin/ggai completion) \
+      --zsh <(SHELL=/bin/zsh $out/bin/ggai completion)
   '';
 
   nativeInstallCheckInputs = [
@@ -82,19 +82,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   versionCheckKeepEnvironment = [
     "HOME"
-    "KILO_DISABLE_MODELS_FETCH"
+    "GGAI_DISABLE_MODELS_FETCH"
   ];
   versionCheckProgramArg = "--version";
 
   passthru = {
-    jsonschema = "${placeholder "out"}/share/kilo/schema.json";
+    jsonschema = "${placeholder "out"}/share/ggai/schema.json";
   };
 
   meta = {
     description = "AI-powered development tool";
     homepage = "https://kilo.ai/";
     license = lib.licenses.mit;
-    mainProgram = "kilo";
+    mainProgram = "ggai";
     inherit (node_modules.meta) platforms;
   };
 })

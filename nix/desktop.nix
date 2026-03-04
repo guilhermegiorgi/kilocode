@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patchShebangs packages/desktop/node_modules
 
     mkdir -p packages/desktop/src-tauri/sidecars
-    cp ${kilo}/bin/kilo packages/desktop/src-tauri/sidecars/kilo-cli-${stdenv.hostPlatform.rust.rustcTarget}
+    cp ${kilo}/bin/ggai packages/desktop/src-tauri/sidecars/ggai-cli-${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   # see publish-tauri job in .github/workflows/publish.yml

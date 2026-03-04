@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 import { $ } from "bun"
 
-import { Script } from "@opencode-ai/script"
+import { Script } from "@ggai/script"
 import { copyBinaryToSidecarFolder, getCurrentSidecar, windowsify } from "./utils"
 
 const pkg = await Bun.file("./package.json").json()
@@ -16,4 +16,4 @@ const dir = "src-tauri/target/kilo-binaries"
 await $`mkdir -p ${dir}`
 await $`gh run download ${Bun.env.GITHUB_RUN_ID} -n kilo-cli`.cwd(dir)
 
-await copyBinaryToSidecarFolder(windowsify(`${dir}/${sidecarConfig.ocBinary}/bin/kilo`))
+await copyBinaryToSidecarFolder(windowsify(`${dir}/${sidecarConfig.ocBinary}/bin/ggai`))

@@ -1,6 +1,6 @@
 # Kilo GitHub Action
 
-A GitHub Action that integrates [Kilo AI](https://kilo.ai) directly into your GitHub workflow.
+A GitHub Action that integrates [Kilo AI](https://gg.ai) directly into your GitHub workflow.
 
 Mention `/kilo` or `/kc` in your comment, and Kilo will execute tasks within your GitHub Actions runner.
 
@@ -91,28 +91,28 @@ This will walk you through installing the KiloConnect GitHub app, creating the w
              persist-credentials: false
 
          - name: Run Kilo
-           uses: Kilo-Org/kilocode/github@latest
+           uses: genesisgrid/kilocode/github@latest
            with:
              model: kilo/claude-sonnet-4-20250514
-             kilo_api_key: ${{ secrets.KILO_API_KEY }}
-             kilo_org_id: ${{ secrets.KILO_ORG_ID }}
+             ggai_api_key: ${{ secrets.GGAI_API_KEY }}
+             ggai_org_id: ${{ secrets.GGAI_ORG_ID }}
    ```
 
-3. Store the API keys in secrets. In your organization or project **settings**, expand **Secrets and variables** on the left and select **Actions**. Add `KILO_API_KEY` and `KILO_ORG_ID`.
+3. Store the API keys in secrets. In your organization or project **settings**, expand **Secrets and variables** on the left and select **Actions**. Add `GGAI_API_KEY` and `GGAI_ORG_ID`.
 
 ## Configuration
 
 ### Inputs
 
 - `model` (required) - The AI model to use (e.g., `kilo/claude-sonnet-4-20250514`)
-- `kilo_api_key` (optional) - Kilo API key for gateway authentication
-- `kilo_org_id` (optional) - Kilo organization ID
+- `ggai_api_key` (optional) - Kilo API key for gateway authentication
+- `ggai_org_id` (optional) - Kilo organization ID
 - `agent` (optional) - Agent to use. Must be a primary agent.
 - `share` (optional) - Share the Kilo session (defaults to true for public repos)
 - `prompt` (optional) - Custom prompt to override the default prompt
 - `mentions` (optional) - Comma-separated list of trigger phrases (defaults to `/kilo,/kc`)
 - `use_github_token` (optional) - Use GITHUB_TOKEN directly instead of Kilo App token exchange (defaults to `false`)
-- `oidc_base_url` (optional) - Base URL for OIDC token exchange API (defaults to `https://api.kilo.ai`)
+- `oidc_base_url` (optional) - Base URL for OIDC token exchange API (defaults to `https://api.gg.ai`)
 
 ### Using Other Providers
 
@@ -120,7 +120,7 @@ You can also use other AI providers by setting their API keys:
 
 ```yml
 - name: Run Kilo
-  uses: Kilo-Org/kilocode/github@latest
+  uses: genesisgrid/kilocode/github@latest
   with:
     model: anthropic/claude-sonnet-4-20250514
   env:
@@ -129,7 +129,7 @@ You can also use other AI providers by setting their API keys:
 
 ## Support
 
-If you encounter issues or have feedback, please create an issue at https://github.com/Kilo-Org/kilocode/issues.
+If you encounter issues or have feedback, please create an issue at https://github.com/genesisgrid/kilocode/issues.
 
 ## Development
 

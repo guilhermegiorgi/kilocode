@@ -28,7 +28,7 @@ import {
   RGBA,
 } from "@opentui/core"
 import { Prompt, type PromptRef } from "@tui/component/prompt"
-import type { AssistantMessage, Part, ToolPart, UserMessage, TextPart, ReasoningPart } from "@kilocode/sdk/v2"
+import type { AssistantMessage, Part, ToolPart, UserMessage, TextPart, ReasoningPart } from "@ggai/sdk/v2"
 import { useLocal } from "@tui/context/local"
 import { Locale } from "@/util/locale"
 import type { Tool } from "@/tool/tool"
@@ -80,18 +80,18 @@ import { formatTranscript } from "../../util/transcript"
 import { UI } from "@/cli/ui.ts"
 import { useTuiConfig } from "../../context/tui-config"
 
-import { formatMarkdownTables } from "../../util/markdown" // kilocode_change
+import { formatMarkdownTables } from "../../util/markdown" // ggai_change
 
 addDefaultParsers(parsers.parsers)
 
 class CustomSpeedScroll implements ScrollAcceleration {
-  constructor(private speed: number) {}
+  constructor(private speed: number) { }
 
   tick(_now?: number): number {
     return this.speed
   }
 
-  reset(): void {}
+  reset(): void { }
 }
 
 const context = createContext<{
@@ -216,7 +216,7 @@ export function Session() {
     if (part.state.status !== "completed") return
     if (part.id === lastSwitch) return
 
-    // kilocode_change - plan_exit no longer switches agent; PlanFollowup handles it
+    // ggai_change - plan_exit no longer switches agent; PlanFollowup handles it
     if (part.tool === "plan_enter") {
       local.agent.set("plan")
       lastSwitch = part.id
@@ -232,19 +232,20 @@ export function Session() {
 
   createEffect(() => {
     const title = Locale.truncate(session()?.title ?? "", 50)
-    // kilocode_change start
+    // ggai_change start
     return exit.message.set(
       [
         ``,
-        `  ██ ▄█▀ ██ ██     ▄████▄  ${UI.Style.TEXT_DIM}${title}${UI.Style.TEXT_NORMAL}`,
-        `  ████   ██ ██     ██  ██  ${UI.Style.TEXT_DIM}kilo -s ${session()?.id}${UI.Style.TEXT_NORMAL}`,
-        `  ██ ▀█▄ ██ ██████ ▀████▀  `,
+        `   ▄████▄   ▄████▄      ▄████▄   ██▓    ██▓    ▄▄▄       ▄▄▄▄    ██████`,
+        `  ██▒  ▀ ██▒  ▀     ▒██▒  ▀ ▓██▒   ▓██▒   ▒████▄    ▓█████▄▒██      ${UI.Style.TEXT_DIM}${title}${UI.Style.TEXT_NORMAL}`,
+        `  ▒██▄██▄ ▒██▄██▄ ██▓ ▒██▄██▄  ▒██░   ▒██░   ▒██  ▀█▄  ▒██▒ ▄██░ ▓██▄   ${UI.Style.TEXT_DIM}ggai -s ${session()?.id}${UI.Style.TEXT_NORMAL}`,
+        `    ▀▀▀▀▀   ▀▀▀▀▀ ▀▀    ▀▀▀▀▀  ▀▀▀    ▀▀▀     ▀▀▀▀▀▀▀   ▀▀▀▀▀▀  ▀▀▀▀▀  `,
       ].join("\n"),
     )
-    // kilocode_change end
+    // ggai_change end
   })
 
-  // kilocode_change start - double ctrl+c to exit for child sessions
+  // ggai_change start - double ctrl+c to exit for child sessions
   const [exitPress, setExitPress] = createSignal(0)
   useKeyboard((evt) => {
     if (!session()?.parentID) return
@@ -259,7 +260,7 @@ export function Session() {
       exit()
     }
   })
-  // kilocode_change end
+  // ggai_change end
 
   // Helper: Find next visible message boundary in direction
   const findNextVisibleMessage = (direction: "next" | "prev"): string | null => {
@@ -474,7 +475,7 @@ export function Session() {
       },
       onSelect: async (dialog) => {
         const status = sync.data.session_status?.[route.sessionID]
-        if (status?.type !== "idle") await sdk.client.session.abort({ sessionID: route.sessionID }).catch(() => {})
+        if (status?.type !== "idle") await sdk.client.session.abort({ sessionID: route.sessionID }).catch(() => { })
         const revert = session()?.revert?.messageID
         const message = messages().findLast((x) => (!revert || x.id < revert) && x.role === "user")
         if (!message) return
@@ -1398,14 +1399,14 @@ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: Ass
 function TextPart(props: { last: boolean; part: TextPart; message: AssistantMessage }) {
   const ctx = use()
   const { theme, syntax } = useTheme()
-  // kilocode_change start - format markdown tables with fixed-width columns
+  // ggai_change start - format markdown tables with fixed-width columns
   const content = createMemo(() => formatMarkdownTables(props.part.text.trim()))
-  // kilocode_change end
+  // ggai_change end
   return (
     <Show when={props.part.text.trim()}>
       <box id={"text-" + props.part.id} paddingLeft={3} marginTop={1} flexShrink={0}>
         <Switch>
-          <Match when={Flag.KILO_EXPERIMENTAL_MARKDOWN}>
+          <Match when={Flag.GGAI_EXPERIMENTAL_MARKDOWN}>
             <markdown
               syntaxStyle={syntax()}
               streaming={true}
@@ -1413,7 +1414,7 @@ function TextPart(props: { last: boolean; part: TextPart; message: AssistantMess
               conceal={ctx.conceal()}
             />
           </Match>
-          <Match when={!Flag.KILO_EXPERIMENTAL_MARKDOWN}>
+          <Match when={!Flag.GGAI_EXPERIMENTAL_MARKDOWN}>
             <code
               filetype="markdown"
               drawUnstyledText={false}

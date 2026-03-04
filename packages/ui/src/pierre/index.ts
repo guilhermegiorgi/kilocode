@@ -129,7 +129,7 @@ const unsafeCSS = `
 
 export function createDefaultOptions<T>(style: FileDiffOptions<T>["diffStyle"]) {
   return {
-    theme: "Kilo", // kilocode_change
+    theme: "Kilo", // ggai_change
     themeType: "system",
     disableLineNumbers: false,
     overflow: "wrap",
